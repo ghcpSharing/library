@@ -81,17 +81,25 @@ Copilot 的功能与 GitHub Copilot Enterprise 一致。
 5. 设置组织策略
 6. 为成员分配许可证
 ```
+激活 Copilot 功能示意图：
+<img width="1352" height="569" alt="image" src="https://github.com/user-attachments/assets/ac8e839a-5cb6-4629-a81e-f9e7c11e7c9e" />
+
+
 
 #### 2. 成员激活流程
 ```
 步骤：
-1. 组织所有者授予访问权限
+1. 组织所有者向成员发送邀请至组织中
 2. 成员收到邀请邮件
-3. 访问 https://github.com/settings/copilot
-4. 确认接受组织的 Copilot 访问
-5. 安装 IDE 扩展
-6. 使用组织账号登录
+3. 组织所有者在Copilot Access 页面授予访问权限
+4. 访问 https://github.com/settings/copilot
+5. 确认接受组织的 Copilot 访问
+6. 安装 IDE 扩展
+7. 使用组织账号登录
 ```
+邀请成员加入组织示意图：
+<img width="1300" height="636" alt="image" src="https://github.com/user-attachments/assets/4886b9a6-7da5-477a-9cf7-d06b52f726db" />
+
 
 ### 企业激活流程
 
@@ -227,6 +235,8 @@ gh copilot --help
     - 代码内容安全配置
 - 用量报表查看与数据导出
 ```
+组织或企业管理员配置 Copilot 界面示意图
+<img width="1102" height="743" alt="image" src="https://github.com/user-attachments/assets/a3758bbc-badf-4c13-af6e-224ccdc97484" />
 
 
 ## ⚠️ 常见问题和故障排除
