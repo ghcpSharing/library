@@ -13,7 +13,7 @@
 - **MCP 工具** - Model Context Protocol 工具集成
 - **扩展工具** - IDE 扩展和配置优化
 
-###  `Wiki Page` [使用指南](https://github.com/ghcpSharing/library/wiki)
+###  `/guides/` 使用指南
 完整的使用指南和最佳实践
 - **配置指南** - 详细的技术配置和环境设置
 - **最佳实践** - 场景化解决方案和使用技巧
@@ -23,7 +23,7 @@
 1. **浏览指南** - 查看全面的教程
 2. **尝试实验** - 进行动手实践
 3. **使用提示词** - 作为你自己工作的模板
-4. 
+
 ## ⚠️ 常见问题和故障排除
 可参考 GitHub Discussion [GitHub Copilot 中文 FAQ](https://github.com/orgs/githubcopilotfaq/discussions), 这个 Discussion 包含开发者常见问题及中文的解决方案, 后续我们也会在这个 Discussion 登记更多常见问题和解决方案。
 
