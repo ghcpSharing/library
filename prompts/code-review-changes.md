@@ -1,6 +1,6 @@
 ---
 mode: 'agent'
-description: '增量代码变更审查，生成针对性的审查建议到reviews/incremental目录'
+description: '增量代码变更审查，生成针对性的审查建议到 .github/reviews/incremental目录'
 tools: ['changes', 'codebase', 'editFiles', 'fetch', 'findTestFiles', 'githubRepo', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'activePullRequest', 'copilotCodingAgent']
 ---
 
@@ -8,7 +8,7 @@ tools: ['changes', 'codebase', 'editFiles', 'fetch', 'findTestFiles', 'githubRep
 
 **🎯 核心目标：专注于当前代码变更的质量、一致性和影响分析，提供可操作的改进建议。**
 
-**📁 输出目录结构：所有增量审查报告将保存在 `reviews/incremental/{YYYY-MM-DD}/` 目录下，便于跟踪代码变更的审查历史。**
+**📁 输出目录结构：所有增量审查报告将保存在 `.github/reviews/incremental/{YYYY-MM-DD}/` 目录下，便于跟踪代码变更的审查历史。**
 
 ## 🚀 增量审查工作流程
 
@@ -21,8 +21,7 @@ tools: ['changes', 'codebase', 'editFiles', 'fetch', 'findTestFiles', 'githubRep
 
 ### 背景收集阶段
 - [ ] 使用 `changes` 工具获取当前所有代码变更
-- [ ] 使用 `search` 工具读取 memory-bank/ 目录了解项目背景
-- [ ] 使用 `search` 工具查找 reviews/overall/ 下最新的审查结果作为参考
+- [ ] 使用 `search` 工具读取 .github/memory-bank/ 目录了解项目背景
 - [ ] 识别变更的影响范围和相关模块
 
 ### 变更分析阶段
@@ -38,7 +37,7 @@ tools: ['changes', 'codebase', 'editFiles', 'fetch', 'findTestFiles', 'githubRep
 - [ ] 验证错误处理和边界情况
 
 ### 建议生成阶段
-- [ ] 使用 `editFiles` 工具创建 reviews/incremental/{YYYY-MM-DD} 目录
+- [ ] 使用 `editFiles` 工具创建 .github/reviews/incremental/{YYYY-MM-DD} 目录
 - [ ] 生成变更摘要和影响分析
 - [ ] 输出具体的改进建议
 - [ ] 创建后续行动建议
@@ -53,11 +52,11 @@ tools: ['changes', 'codebase', 'editFiles', 'fetch', 'findTestFiles', 'githubRep
    - 识别新增、修改、删除的文件和代码行
 
 2. **项目背景理解**：
-   - 使用 `search` 工具读取 memory-bank/ 下的项目文档
+   - 使用 `search` 工具读取 .github/memory-bank/ 下的项目文档
    - 理解项目的架构模式、技术标准、性能目标
 
 3. **历史审查参考**：
-   - 使用 `search` 工具查找 reviews/overall/ 目录下最新的审查结果
+   - 使用 `search` 工具查找 .github/reviews/ 目录下最新的审查结果
    - 提取之前识别的问题、建议和模式
    - 检查当前变更是否解决了之前的问题或引入了新问题
 
@@ -77,12 +76,11 @@ flowchart TD
 
 ### 第四步：生成增量审查报告
 
-**必须创建 `reviews/incremental/{YYYY-MM-DD}` 目录，包含以下文件：**
+**必须创建 `.github/reviews/incremental/{YYYY-MM-DD}` 目录，包含以下文件：**
 
 ## 📁 输出文件结构
-
 ```
-reviews/
+.github/reviews/
 └── incremental/
     └── {YYYY-MM-DD}/
         ├── change-summary.md       # 变更摘要和影响分析
