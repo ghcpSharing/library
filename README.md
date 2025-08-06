@@ -13,7 +13,7 @@
 - **MCP 工具** - Model Context Protocol 工具集成
 - **扩展工具** - IDE 扩展和配置优化
 
-###  `wiki Page` [使用指南](https://github.com/ghcpSharing/library/wiki)
+###  `Wiki Page` [使用指南](https://github.com/ghcpSharing/library/wiki)
 完整的使用指南和最佳实践
 - **配置指南** - 详细的技术配置和环境设置
 - **最佳实践** - 场景化解决方案和使用技巧
