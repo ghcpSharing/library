@@ -216,7 +216,7 @@ gh copilot --help
 
 
 ## ⚠️ 常见问题和故障排除
-可参考 GitHub Discussion [GitHub Copilot FAQ](https://github.com/orgs/githubcopilotfaq/discussions), 这个 Discussion 包含开发者常见问题及中文的解决方案, 后续我们也会在这个 Discussion 登记更多常见问题和解决方案。
+可参考 GitHub Discussion [GitHub Copilot 中文 FAQ](https://github.com/orgs/githubcopilotfaq/discussions), 这个 Discussion 包含开发者常见问题及中文的解决方案, 后续我们也会在这个 Discussion 登记更多常见问题和解决方案。
 
 
 ## 📞 支持资源
