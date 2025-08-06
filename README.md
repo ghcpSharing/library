@@ -31,18 +31,24 @@
 1. **浏览指南** - 查看全面的教程
 2. **尝试实验** - 进行动手实践
 3. **使用提示词** - 作为你自己工作的模板
-4. **分享发现** - 与社区共享你的经验
+4. 
+## ⚠️ 常见问题和故障排除
+可参考 GitHub Discussion [GitHub Copilot FAQ](https://github.com/orgs/githubcopilotfaq/discussions), 这个 Discussion 包含开发者常见问题及中文的解决方案, 后续我们也会在这个 Discussion 登记更多常见问题和解决方案。
 
-## 🤝 贡献
 
-我们欢迎贡献！请查看我们的贡献指南，了解如何添加你自己的指南、实验或提示词。
+## 📞 支持资源
 
-## 📚 学习路径
+### 官方文档
+- [GitHub Copilot 文档](https://docs.github.com/copilot)
+- [设置指南](https://docs.github.com/copilot/setting-up-github-copilot)
+- [故障排除](https://docs.github.com/copilot/troubleshooting-github-copilot)
 
-**初学者** → 基础 Copilot 使用和简单提示词  
-**中级** → 高级技巧和框架集成  
-**高级** → 自定义工作流和企业部署
+### 社区资源
+- [GitHub Community](https://github.com/orgs/community/discussions)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/github-copilot)
+- [Reddit r/github](https://reddit.com/r/github)
+
 
 ---
 
-*此仓库由开发者社区维护，旨在推广有效的 AI 辅助开发实践。*
+*此仓库旨在推广有效的 GitHub Copilot 辅助开发实践。*

@@ -231,10 +231,6 @@ gh copilot --help
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/github-copilot)
 - [Reddit r/github](https://reddit.com/r/github)
 
-### 企业支持
-- GitHub Enterprise Support
-- 合作伙伴支持服务
-- 专业服务咨询
 
 ---
 
