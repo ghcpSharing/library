@@ -44,7 +44,7 @@
 - **翻译改进**：帮助改进中文表达和本土化内容
 
 ### 🔗 有用链接
-- **主仓库**：[GitHub Copilot Sharing](https://github.com/ghcpSharing/sharing) - 工具、模板和实验
+- **主仓库**：[GitHub Copilot Sharing](https://github.com/ghcpSharing/library) - 工具、模板和实验
 - **官方文档**：[GitHub Copilot 官方文档](https://docs.github.com/copilot)
 - **社区讨论**：[GitHub Copilot 中文 FAQ](https://github.com/orgs/githubcopilotfaq/discussions)
 
