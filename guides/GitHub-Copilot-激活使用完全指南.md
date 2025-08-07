@@ -14,38 +14,23 @@
 
 ## 📋 版本对比一览 
 
-### 🆓 GitHub Copilot Free
-- **适用对象**：个人开发者（无组织或企业访问权限）
-- **费用**：免费
-- **功能限制**：
-  - 每月最多 2,000 次代码补全
-  - 每月最多 50 次高级请求
-  - 基础模型访问
-  - 有限的 Chat 功能（50 次请求/月）
-  - 多 IDE 支持
-  - Linux&Windows 终端命令辅助支持
-- **激活方式**：直接注册 GitHub 账号即可使用
-
-
-### 🏢 GitHub Copilot Business
-- **适用对象**：组织（GitHub Free 或 GitHub Team 计划）
-- **费用**：$19 USD/用户/月
-- **功能特性**：
-  - 每用户每月 300 次高级请求
-  - 集中管理 Copilot 用户
-  - 组织级策略控制
-  - Copilot Coding Agent
-- **管理功能**：组织所有者可以控制访问权限和策略
-
-### 🏛️ GitHub Copilot Enterprise
-- **适用对象**：企业（GitHub Enterprise Cloud）
-- **费用**：$39 USD/用户/月
-- **功能特性**：
-  - Business 版本所有功能
-  - 每用户每月 1,000 次高级请求
-  - 最顶级的模型
-  - 企业级知识库集成
-  - 代码 Review 规则配置
+| 功能特性 | 🆓 Free | 🏢 Business | 🏛️ Enterprise |
+|---------|---------|-------------|---------------|
+| **适用对象** | 个人开发者（无组织或企业访问权限） | 组织（GitHub Free 或 GitHub Team 计划） | 企业（GitHub Enterprise Cloud） |
+| **费用** | 免费 | $19 USD/用户/月 | $39 USD/用户/月 |
+| **IDE 支持** | 多 IDE 支持 | 多 IDE 支持 | 多 IDE 支持 |
+| **终端辅助** | Linux & Windows 支持 | Linux & Windows 支持 | Linux & Windows 支持 |
+| **激活方式** | 直接注册 GitHub 账号 | 组织所有者分配坐席 | 企业管理员配置权限 |
+| **用户管理** | - |  集中管理 Copilot 用户 |  集中管理 Copilot 用户 |
+| **代码补全** | 每月最多 2,000 次 | 无限制 | 无限制 |
+| **Chat 功能** | 有限（50 次请求/月） | 完整功能 | 完整功能 |
+| **高级请求** | 每月最多 50 次 | 每用户每月 300 次 | 每用户每月 1,000 次 |
+| **模型访问** | 基础模型 | 高级模型 | 最顶级模型 |
+| **策略控制** | - | ✅ 组织级策略控制 | ✅ 企业级策略控制 |
+| **Coding Agent** | - | ✅ 支持 | ✅ 支持 |
+| **用量报表** | - | - | ✅ Copilot 用量报表与数据导出 |
+| **知识库集成** | - | - | ✅ 企业级知识库集成 |
+| **代码审查** | - | - | ✅ 代码 Review 规则配置 |
 
 具体完整文档请参考 [GitHub Copilot 订阅模式比较](https://docs.github.com/en/copilot/get-started/plans#comparing-copilot-plans)。
 
