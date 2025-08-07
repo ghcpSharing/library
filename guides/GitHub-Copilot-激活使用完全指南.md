@@ -40,6 +40,7 @@
 EMU 是 GitHub Enterprise Cloud 的一种身份管理模式，适用于需要严格控制用户身份和访问权限的大型企业。
 Copilot 的功能与 GitHub Copilot Enterprise 一致。
 
+
 ### EMU 特性：
 - **身份提供商 (IdP) 管理**：通过 Azure AD、Okta 等 IdP 管理用户生命周期
 - **统一身份验证**：用户必须通过企业 IdP 认证
@@ -51,6 +52,7 @@ Copilot 的功能与 GitHub Copilot Enterprise 一致。
 - 通过企业 IdP 进行统一认证
 - 无需单独的 Copilot 激活流程
 - 受企业策略统一管控
+如果用户需要用 Idp 集成, 但不想用 GitHub Copilot Enterprise。 需要申请 EMU + Copilot Standalone(与Business功能类似，但无组织管理功能), 目前费用与 Business 版本一致。
 
 ## 🚀 激活流程详解
 
