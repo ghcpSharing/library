@@ -57,6 +57,7 @@ Copilot 的功能与 GitHub Copilot Enterprise 一致。
 ## 🚀 激活流程详解
 
 ### 组织激活流程
+如需批量邀请用户请参考 [GitHub 用户批量邀请脚本](../scripts/invitemembers/ReadMe.md)
 
 #### 1. 组织所有者设置 Copilot Business
 ```
