@@ -73,6 +73,9 @@
 - 确认计费周期切换正确
 ```
 
+更多内容请参考 [绑定 Azure 订阅](https://docs.github.com/en/billing/how-tos/set-up-payment/connect-azure-sub)
+
+
 ### 📊 Azure 计费周期管理
 ```markdown
 🔄 计费周期转换：
