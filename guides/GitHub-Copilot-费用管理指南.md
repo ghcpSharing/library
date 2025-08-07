@@ -57,6 +57,7 @@
 - 有效的 Azure 订阅 ID
 ```
 
+
 #### 2. Azure 集成步骤
 ```bash
 # 步骤1：在 GitHub 中配置 Azure 集成
@@ -66,12 +67,23 @@
 4. 登录 Azure 账号并授权
 5. 选择目标 Azure 订阅
 6. 确认集成配置
+```
+<img width="729" height="407" alt="image" src="https://github.com/user-attachments/assets/6de33ed9-0fa3-42d5-affa-3b6dbdfe5402" />
 
+如果企业已经配置了 Billing, 其下属组织则不用再做配置，可通过 GitHub Cost Center 来对组织的费用进行管理。
+
+<img width="1564" height="834" alt="image" src="https://github.com/user-attachments/assets/e108e57b-8a62-4ad9-9510-98573597cfe1" />
+
+
+```bash
 # 步骤2：验证集成状态
 - 检查 GitHub 计费页面的 Azure 订阅显示
 - 验证 Azure 门户中的 GitHub 使用情况
 - 确认计费周期切换正确
 ```
+用 Azure 账号登录后，选择合适的 Azure 订阅即可。
+
+<img width="470" height="220" alt="image" src="https://github.com/user-attachments/assets/bb695cce-8e92-430d-a384-1a1a73be00ae" />
 
 更多内容请参考 [绑定 Azure 订阅](https://docs.github.com/en/billing/how-tos/set-up-payment/connect-azure-sub)
 
@@ -150,9 +162,13 @@
 - **Organization Budgets**：组织管理员可在各自组织内设置预算上限，实时监控费用消耗，防止超支。
 
 通过这两项功能，企业可实现：
-- 按部组织灵活分摊和追踪 Copilot 及相关服务费用。**目前的最小 cope 为组织级别。**
+- 按组织灵活分摊和追踪 Copilot 及相关服务费用。**目前的最小 cope 为组织级别。**
+- 可选择对 Copilot  的 Premium Requests 这个 SKU 做限定来控制组织总体花费 Premium Requests 的金额。 Budget 默认为0，意味着套餐内的 Premium Request 用完后，不能再使用 Premium Requests.
 - 设定多级预算阈值，自动预警和控制费用
-- 支持财务合规、成本优化和内部结算需求
+
+<img width="1037" height="808" alt="image" src="https://github.com/user-attachments/assets/6776a5b5-6d0d-4186-bbcd-e909a9b6a5d8" />
+
+
 
 ## 🔄 坐席取消与费用处理
 
@@ -197,6 +213,8 @@
 - Premium Requests 消耗情况  
 - 组织费用分布
 ```
+
+<img width="1760" height="892" alt="image" src="https://github.com/user-attachments/assets/5274a24f-6c61-4341-ae42-c77e2cc5c440" />
 
 
 ## 📞 支持与资源
