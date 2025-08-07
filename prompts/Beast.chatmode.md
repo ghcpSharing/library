@@ -1,5 +1,5 @@
 ---
-description: 'Top-notch coding agent.'
+description: 'Claude Sonnet 4 as a top-notch coding agent.'
 model: Claude Sonnet 4
 title: 'Beast Mode'
 ---
