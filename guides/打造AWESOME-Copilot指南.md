@@ -41,7 +41,7 @@
 
 ```mermaid
 graph TD
-    CI[🛠️ Copilot Instructions<br/>基础层：项目记忆与规范] --> CM[🧩 Chat Modes<br/>执行层：专业角色与工作流]
+    CI[🛠️ Copilot Instructions<br/>基础层：项目指导与（可选）长期记忆] --> CM[🧩 Chat Modes<br/>执行层：专业角色与工作流]
     CI --> RP[🎯 Reusable Prompts<br/>增强层：特定场景加强]
     CM --> RP
     
@@ -72,6 +72,8 @@ graph TD
 applyTo: '**'
 description: '项目记忆和上下文连续性系统'
 ```
+
+> 说明：Memory Bank 是基于 Copilot Instructions 的一种实践，用于实现“长期记忆”。而 Copilot Instructions 本身更广，亦可仅承担仓库级指导（如编码规范、提交流程、安全约束等），并不必然承载 Memory Bank。
 
 **核心价值**：
 - **🔄 持续生效**：每次 Chat 对话都自动加载，无需手动激活
@@ -240,9 +242,24 @@ graph TD
 ---
 > **在 Prompt 的正文中， 可以根据场景的需要让 Copilot 调用合适的工具，这些工具可以是 Copilot 内置的（如 changes, codebase 等），也可以是你自己定义的 MCP 工具，也可以 Copilot Extension 提供的工具**。
 
-
-
 更多的 Prompt files 可参考[awesome-copilot](https://github.com/github/awesome-copilot/tree/main)
+
+---
+
+## 🔍 验证与迭代方法
+
+- 本地验证
+    - Instructions：新开 Chat，观察风格/边界是否被遵守。
+    - Chat Mode：从模式下拉启用，验证输入/输出契约与停止条件。
+    - Reusable Prompt：在 Chat 附加该 prompt，测试 #selection/#file/#codebase/#git 是否注入正确。
+- 指标与迭代
+    - 以“完成时间、返工率、缺陷数、可读性评分”做双周对比优化。
+    - 关键技术决策后同步更新 Instructions 与相关 Prompts；Chat Mode 按季度回顾。
+
+> 速查：常用变量与参与者 — #selection、#file、#codebase、#git、#editor
+
+
+
 ---
 
 > 💡 **成功秘诀**：好的自定义 Prompts 不是一次性工作，而是持续迭代和优化的过程。从小处开始，逐步完善，让 AI 真正成为你团队的智能编程伙伴。
