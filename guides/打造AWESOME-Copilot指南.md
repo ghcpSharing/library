@@ -27,7 +27,8 @@
 | **生效范围** | 全局（所有聊天请求） | 按需调用（特定任务） | 会话级别（特定角色） |
 | **配置复杂度** | 简单 | 中等 | 复杂 |
 
-上述的 Copilot Instructions 模式在 VSCode, JetBrains, VS, XCode 和 WebBrowser 都支持。另外两种模式，目前只有 VSCode 支持对应的 UI 交互，即可以在非 VSCode 的 IDE 中使用 Chat Modes 和 Reusable Prompts, 需要手动将对应的 prompts 文件内容复制到 chat context 中。
+上述的 Copilot Instructions 模式在 VSCode, JetBrains, VS, XCode 和 WebBrowser 都支持。另外两种模式，目前只有 VSCode 支持对应的 UI 交互，即可以在非 VSCode 的 IDE 中使用一样使用 Chat Modes 和 Reusable Prompts, **需要手动将对应的 prompts 文件内容复制到 chat context 中**。
+
 此三种模式仅适用于 GitHub Copilot Chat 功能, 代码补全尚不支持。
 
 另外，GitHub Copilot 还支持组织级别的 Custom Instructions, 但它目前只适用于 GitHub 网站上的 Copilot 回答。这里就不做过多介绍。 更多请参考 https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/configure-custom-instructions/add-organization-instructions
@@ -178,6 +179,14 @@ graph LR
     VSC_CI -.->|拆分/引用| OTHER_PROMPTS
     VSC_CM -.->|拆分/引用| OTHER_PROMPTS
 ```
+
+> 📸 **JetBrain Agent Model 添加Prompts 文件**
+> 
+> <img width="618" height="141" alt="image" src="https://github.com/user-attachments/assets/773860d1-3df8-457c-93ad-2f31b9556485" />
+
+> 📸 **XCode 添加Prompts 文件**
+> 
+> <img width="490" height="283" alt="image" src="https://github.com/user-attachments/assets/7d508d8f-6310-45b4-b8d0-adfab4ac7fc7" />
 
 ### 💡 三种模式的重要性
 
