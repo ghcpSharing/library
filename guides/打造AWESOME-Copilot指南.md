@@ -1,8 +1,16 @@
-# 🚀 GitHub Copilot 自定义 Prompts 提升性能指南
+# 🚀 AWESOME-Copilot 
 
-> 🎯 **释放 AI 编程的真正潜力！** 通过自定义 Prompts、指令和聊天模式，让 GitHub Copilot 更好地理解你的项目需求，提供更精确、更符合团队标准的代码建议。 先快速看看有哪几种自定义方式。 在文章后半部分，我们会去拆解好的实践案例，同时不同场景下采用何种模式
+> 🎯 **释放 AI 编程的真正潜力！** 一方面构建 Prompts 体系，让 Copilot 深入理解你的项目；另一方面在 IDE（VS Code）中开启合适的设置与开关，获得更流畅的体验。
+> 本文将以这两条路径分别展开：先快速概览自定义方式，再用实践案例说明不同场景如何组合使用。
 
-## 🌟 为什么需要自定义 Prompts？
+> 提示：升级 Copilot 体验有两条路径，需并行建设：
+> 1) Prompts 体系（ Copilot Instructions / Chat Modes / Reusable Prompts）
+> 2) VS Code 设置与开关（体验与可见性 / 上下文生产力）
+> 本文将分别以独立章节展开，先讲 Prompts，再讲 VS Code 设置与开关。
+
+## 📦 Prompts 体系
+
+### 🌟 为什么需要自定义 Prompts？
 
 ### 📈 默认 vs 自定义的全面对比
 
@@ -16,7 +24,7 @@
 | **安全性** | 基础安全实践 | 内置安全最佳实践和风险防护护 |
 | **效率** | 基础代码生成 | 高效的项目导向解决方案 | 
 
-## 📋 GitHub Copilot 三种自定义模式
+### 📋 GitHub Copilot 三种自定义模式
 
 | 自定义方式 | 🛠️ Copilot Instructions<br/>（自定义指令） | 🎯 Reusable Prompts<br/>（可复用提示词） | 🧩 Chat Modes<br/>（聊天模式） |
 |-----------|----------------------------------|-----------------------------------|----------------------------|
@@ -36,7 +44,7 @@
 
 ## 🎨 三种 Prompts 模式的协作架构
 
-### 📐 协作关系概览
+#### 📐 协作关系概览
 
 三种自定义模式形成了一个完整的 AI 编程辅助生态系统，每种模式承担不同的职责，相互补充。以下用 Memory Bank, Beast Mode 及 Code Review 来说明它们的协作关系。
 
@@ -65,7 +73,7 @@ graph TD
     end
 ```
 
-### 🛠️ Memory Bank - 基础层：项目长期记忆
+#### 🛠️ Memory Bank - 基础层：项目长期记忆
 **类型**：Copilot Instructions  
 **位置**：`.github/copilot-instructions.md`
 
@@ -89,7 +97,7 @@ description: '项目记忆和上下文连续性系统'
 4. progress.md - 项目进度与状态
 ```
 
-### 🦁 Beast Mode - 执行层：自主编程代理
+#### 🦁 Beast Mode - 执行层：自主编程代理
 **类型**：Chat Modes  
 **位置**：`.vscode/chatmodes/Beast.chatmode.md`
 
@@ -110,7 +118,7 @@ title: 'Beast Mode'
 - 通过工具进行严格的代码测试
 - 递归收集所有相关信息
 
-### 🔍 Code Review Changes - 增强层：特定场景加强
+#### 🔍 Code Review Changes - 增强层：特定场景加强
 **类型**：Reusable Prompts  
 **位置**：`.github/prompts/code-review-changes.md`
 
@@ -130,9 +138,9 @@ description: '增量代码变更审查，生成针对性审查建议'
 3. 质量评估：检查代码质量和潜在问题
 4. 建议生成：提供具体的改进建议
 
-### 🔗 三种模式的协作场景
+#### 🔗 三种模式的协作场景
 
-#### 场景 1：复杂功能开发
+##### 场景 1：复杂功能开发
 ```mermaid
 sequenceDiagram
     participant Dev as 开发者
@@ -155,7 +163,7 @@ sequenceDiagram
     RP->>Dev: 返回审查建议
 ```
 
-#### 场景 2：非 VSCode IDE 的多 prompts 协作
+##### 场景 2：非 VSCode IDE 的多 prompts 协作
 对于不支持 Chat Modes 的 IDE（如 JetBrains、Visual Studio），将 prompts 文件（如 `.github/chatmodes/*.chatmode.md`、团队规范等）按需加入到 chat context，实现复合能力，无需将其全部合并进 `copilot-instructions.md`：
 
 ```mermaid
@@ -188,7 +196,7 @@ graph LR
 > 
 > <img width="490" height="283" alt="image" src="https://github.com/user-attachments/assets/7d508d8f-6310-45b4-b8d0-adfab4ac7fc7" />
 
-### 💡 三种模式的重要性
+#### 💡 三种模式的重要性
 
 | 缺失模式 | 后果 | 实际影响 |
 |---------|------|----------|
@@ -202,14 +210,16 @@ graph LR
 3. **Reusable Prompts 场景加强** - 在特定场景下叠加专业能力
 
 
-## 🔧 实施步骤指南
+### 🔧 实施步骤指南
 
-### 第一步：评估当前需求
+> 提示：建议先明确团队在 VS Code 上的基础开关策略（安全与可控性优先），再开始 Prompts 配置与落地，可减少后续体验差异带来的偏差。
+
+#### 第一步：评估当前需求
 1. **分析项目特点**：技术栈、架构模式、业务领域
 2. **识别痛点**：代码质量、一致性、效率问题
 3. **确定优先级**：最需要改进的方面
 
-### 第二步：选择自定义方式
+#### 第二步：选择自定义方式
 ```mermaid
 graph TD
     A[评估需求] --> B{适用范围}
@@ -222,7 +232,7 @@ graph TD
     E --> H[配置 .vscode/chatmodes/*.md]
 ```
 
-### 第三步：制定对应的 Prompts
+#### 第三步：制定对应的 Prompts
 
 **类型**：Copilot Instructions  
 **位置**：`.github/copilot-instructions.md`
@@ -253,8 +263,27 @@ graph TD
 
 更多的 Prompt files 可参考[awesome-copilot](https://github.com/github/awesome-copilot/tree/main)
 
-
 ---
+
+## ⚙️  IDE 设置与开关
+
+> 目标：在 Prompts 之外，通过 IDE 的设置与（预览/实验）开关提升 Chat、Agent 模式与上下文生产力。
+
+### 设置与开关总览（VS Code）
+
+| 设置/开关                   | 入口/路径                        | 值          | 推荐等级  |
+| --------------------------- | -------------------------------- | ----------- | --------- |
+| Agent 单次任务最大请求次数  | chat.agent.maxRequests           | 可设置到 80 | 🌟🌟🌟 |
+| 会话检查点                  | chat.checkpoints.enabled         | true        | 🌟🌟🌟 |
+| 会话检查点的变更记录显示    | chat.checkpoints.showFileChanges | true        | 🌟🌟🌟 |
+| Agent 模式中 Todolist 启用               | chat.todoListTool.enabled              | true        | 🌟🌟🌟    |
+| Agent 模式中开启 AutoApprove后无需要再手动审批每次 agent 的终端任务执行(仅支持远程 VSCode Server)            | chat.tools.autoApprove          | true        | 🌟🌟🌟    |
+| 使用 Katex 进行数学公式渲染 | chat.math.enabled                | true        | 🌟🌟    |
+
+> 注：不同 VS Code 与 GitHub Copilot 扩展版本中，部分开关名称与位置可能存在差异；建议以“设置搜索关键词”与“命令面板”为主要入口，团队统一基线后再细化。
+
+
+
 
 > 💡 **成功秘诀**：好的自定义 Prompts 不是一次性工作，而是持续迭代和优化的过程。从小处开始，逐步完善，让 AI 真正成为你团队的智能编程伙伴。
 
