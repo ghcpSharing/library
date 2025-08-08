@@ -6,32 +6,45 @@
 ```
 sharing/
 ├── README.md                    # 项目主入口和概述
-├── ai-instructions.md           # AI 助手指导文件
 ├── .github/
-│   ├── copilot-instructions.md  # GitHub Copilot 特定指令
-│   └── chatmodes/              # 聊天模式配置
-├── memory-bank/                 # 项目记忆库
-│   ├── projectbrief.md         # 项目概要
-│   ├── productContext.md       # 产品背景
-│   ├── systemPatterns.md       # 系统模式（本文件）
-│   ├── techContext.md          # 技术上下文
-│   ├── activeContext.md        # 当前活动上下文
-│   ├── progress.md             # 项目进度
-│   └── tasks/                  # 任务管理
-├── guides/                     # 指南目录
-│   ├── README.md              # 指南总览
-│   └── github-copilot-activation-guide.md  # Copilot激活指南
-├── labs/                       # 实验练习
-└── prompts/                    # 提示词与工具生态
-    ├── README.md              # 提示词与工具总览
-    ├── code-generation/        # 代码生成模板
-    ├── debugging/              # 调试模板
-    ├── refactoring/            # 重构相关（计划中）
-    ├── documentation/          # 文档生成（计划中）
-    ├── testing/                # 测试相关（计划中）
-    ├── mcp-tools/             # MCP工具集合
-    └── extensions/            # 扩展工具推荐
+│   ├── copilot-instructions.md  # GitHub Copilot 指令
+│   ├── chatmodes/               # 聊天模式配置
+│   └── memory-bank/             # 项目记忆库（Memory Bank）
+│       ├── projectbrief.md
+│       ├── productContext.md
+│       ├── systemPatterns.md
+│       ├── techContext.md
+│       ├── activeContext.md
+│       ├── progress.md
+│       └── tasks/
+├── guides/                      # 指南目录（中文命名）
+│   ├── Readme.md
+│   ├── 打造AWESOME-Copilot指南.md
+│   ├── 激活使用指南.md
+│   └── 费用管理指南.md
+├── labs/
+│   └── README.md
+├── prompts/
+│   ├── README.md
+│   ├── Beast.chatmode.md
+│   ├── code-review-changes.md
+│   ├── MemoryBank.md
+│   └── ...
+├── scripts/
+│   ├── Readme.md
+│   └── invitemembers/
+│       ├── invitemember-ent-email.py
+│       ├── invitemember-org-email.py
+│       ├── invitemember-org-login.py
+│       ├── ReadMe.md
+│       ├── usermails.txt
+│       └── usernames.txt
+└── library.wiki/
+    ├── Home.md
+    └── GitHub-Copilot-激活使用完全指南.md
 ```
+
+> 注：本仓库采用中文文件命名以提升本土化可读性；Memory Bank 位于 `.github/memory-bank/` 路径下。
 
 ### 信息架构原则
 1. **层次化组织**：按功能和用途分层组织内容
