@@ -81,7 +81,8 @@ graph TD
 - ⚡ 可在复杂场景下提供更准确的解决方案
 
 > 📸 **界面预览**
-> ![GPT-5 模型选择器](images/vscode-gpt5-model-selector.png)
+> <img width="384" height="303" alt="image" src="https://github.com/user-attachments/assets/bcafa76e-4ea9-42a5-be07-3a5f567db0f0" />
+
 > *VS Code 中选择 GPT-5 模型的界面*
 
 ---
@@ -153,16 +154,17 @@ gantt
 
 #### 🎛️ **模型倍率系数（消费系数）**
 
-| 模型 | 类别 | 倍率示例 | 说明 |
+| 模型 | 类别 | 倍率示例 |
 |------|------|----------|------|
-| **GPT-4o, GPT-4.1** | 包含模型 | 0× | 付费计划下免费 |
-| **GPT-5** | Premium | 参考文档 | 前沿模型，计入配额 |
-| **Claude Opus** | Premium | 10×* | 官方示例倍率 |
+| **GPT-4o, GPT-4.1** | 包含模型 | 0× | 
+| **GPT-5** | Premium | 1x | 
+| **Claude Opus** | Premium | 10×* | 
 
 *具体倍率以 GitHub Docs 实时表与 IDE 内显示为准
 
 > 📸 **费用监控界面**
-> ![Premium 使用量监控](images/copilot-premium-usage.png)
+> <img width="1331" height="879" alt="image" src="https://github.com/user-attachments/assets/7784e774-cc5f-4b55-b63c-0e8789de6b39" />
+
 > *VS Code 状态栏显示的 Premium 请求使用进度*
 
 ### 📊 **监控与治理工具**
@@ -174,11 +176,12 @@ gantt
 #### 🏢 **企业/组织管理**
 - 👥 为成员设置预算限制
 - 📈 查看团队使用报表
-- 💳 选择计费实体（多人多许可证场景）
+- 💳 选择计费实体
 - ⚠️ 设置预算告警
 
 > 📸 **管理界面示例**
-> ![GitHub 组织 Copilot 设置](images/github-copilot-settings.png)
+> <img width="2074" height="1616" alt="image" src="https://github.com/user-attachments/assets/dfba3e0b-270e-4a3d-aafc-ee14e5bf57b3" />
+
 > *GitHub 组织设置中的 Copilot 配置页面*
 
 ---
@@ -191,7 +194,7 @@ gantt
 graph TD
     A[管理员] --> B[GitHub 组织设置]
     B --> C[开启 Premium 请求]
-    C --> D[允许前沿模型]
+    C --> D[开启 GPT 5-1 的模型访问]
     D --> E[设置预算策略]
     
     F[开发者] --> G[VS Code 重新登录]
@@ -212,42 +215,21 @@ graph TD
 5. 🏢 如多人多许可证，明确组织的计费实体
 
 > 📸 **设置界面**
-> ![组织 Copilot 策略设置](images/org-copilot-policy.png)
+> <img width="1269" height="856" alt="image" src="https://github.com/user-attachments/assets/50067599-2b63-4582-8408-73d8a2b6603a" />
+
 > *组织管理员设置 Premium 模型访问权限*
 
-#### Step 2: 预算管理
-```yaml
-# 预算配置示例
-budget_settings:
-  monthly_limit: "$100"
-  overage_policy: "allow_with_billing"  # 或 "block"
-  alert_threshold: 80%  # 80% 时发送告警
-  billing_entity: "organization"  # 或具体团队
-```
 
 ### 👨‍💻 **开发者使用步骤**
 
 #### Step 1: 刷新授权
-1. 🔄 在管理员开启策略后，于 VS Code 中"注销并重新登录"GitHub 账户
-2. 📝 命令面板执行 `GitHub: Sign out` → `GitHub: Sign in`
-3. 🔄 或直接重载窗口刷新授权状态
+1. 🔄 在管理员开启策略后，于 VS Code 中进入命令面板，选择 **开发人员：重新加载窗口**
 
 #### Step 2: 模型选择
 1. 📋 打开 Copilot 侧边栏/状态栏
 2. ✅ 确认可选模型列表中出现 GPT-5
 3. 🎯 在模型选择器中切换到 GPT-5
 
-#### Step 3: 使用监控
-1. 📊 点击状态栏 Copilot 图标查看"Premium requests"用量进度
-2. 🌐 必要时在 `GitHub.com > Your Copilot > Usage` 核对额度与重置时间
-
-> 📸 **使用界面截图系列**
-> 
-> ![VS Code GPT-5 选择](images/vscode-model-selection.png)
-> *在 VS Code 中选择 GPT-5 模型*
-> 
-> ![使用量监控](images/usage-monitoring.png)
-> *实时查看 Premium 请求使用情况*
 
 
 ## 📚 参考链接
