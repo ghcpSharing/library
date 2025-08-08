@@ -27,7 +27,7 @@
 | **生效范围** | 全局（所有聊天请求） | 按需调用（特定任务） | 会话级别（特定角色） |
 | **配置复杂度** | 简单 | 中等 | 复杂 |
 
-上述的 Copilot Instructions 模式在 VSCode, JetBrains, VS, XCode 和 WebBrowser 都支持。另外两种模式，目前只有 VSCode 支持。
+上述的 Copilot Instructions 模式在 VSCode, JetBrains, VS, XCode 和 WebBrowser 都支持。另外两种模式，目前只有 VSCode 支持对应的 UI 交互，即可以在非 VSCode 的 IDE 中使用 Chat Modes 和 Reusable Prompts, 需要手动将对应的 prompts 文件内容复制到 chat context 中。
 此三种模式仅适用于 GitHub Copilot Chat 功能, 代码补全尚不支持。
 
 另外，GitHub Copilot 还支持组织级别的 Custom Instructions, 但它目前只适用于 GitHub 网站上的 Copilot 回答。这里就不做过多介绍。 更多请参考 https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/configure-custom-instructions/add-organization-instructions
@@ -154,8 +154,8 @@ sequenceDiagram
     RP->>Dev: 返回审查建议
 ```
 
-#### 场景 2：非 VSCode IDE 的综合指令
-对于不支持 Chat Modes 的 IDE（如 JetBrains、Visual Studio），需要将多种指令合并到 Copilot Instructions 中：
+#### 场景 2：非 VSCode IDE 的多 prompts 协作
+对于不支持 Chat Modes 的 IDE（如 JetBrains、Visual Studio），将 prompts 文件（如 `.github/chatmodes/*.chatmode.md`、团队规范等）按需加入到 chat context，实现复合能力，无需将其全部合并进 `copilot-instructions.md`：
 
 ```mermaid
 graph LR
@@ -169,14 +169,14 @@ graph LR
     end
     
     subgraph "🔧 其他 IDE 适配"
-        OTHER_CI[综合指令<br/>Memory Bank + Beast Mode]
+        OTHER_PROMPTS[多 prompts 文件<br/>按需加入 chat context]
         OTHER_RP[Reusable Prompts<br/>手动复制使用]
         
-        OTHER_CI --> OTHER_RP
+        OTHER_PROMPTS --> OTHER_RP
     end
     
-    VSC_CI -.->|合并| OTHER_CI
-    VSC_CM -.->|融入| OTHER_CI
+    VSC_CI -.->|拆分/引用| OTHER_PROMPTS
+    VSC_CM -.->|拆分/引用| OTHER_PROMPTS
 ```
 
 ### 💡 三种模式的重要性
