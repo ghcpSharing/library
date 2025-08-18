@@ -7,24 +7,17 @@
 ### 🚀 入门实验
 | 实验 | 简介 | 难度 | 状态 |
 |------|------|------|------|
-| 提示词编写技巧 | 如何编写有效的提示词来引导 Copilot | ⭐ 初级 | 📝 计划中 |
-| Chat 功能入门 | GitHub Copilot Chat 的基本使用方法 | ⭐ 初级 | 📝 计划中 |
+
 
 ### 💻 编程语言实验
 | 实验 | 简介 | 难度 | 状态 |
 |------|------|------|------|
-| Python 开发实践 | Python 项目中的 Copilot 最佳实践 | ⭐⭐ 中级 | 📝 计划中 |
-| JavaScript/TypeScript 实战 | 前端开发中的 Copilot 应用技巧 | ⭐⭐ 中级 | 📝 计划中 |
-| Java 企业级开发 | 企业级 Java 项目的 Copilot 使用 | ⭐⭐⭐ 高级 | 📝 计划中 |
-| Go 微服务开发 | Go 语言微服务项目实践 | ⭐⭐ 中级 | 📝 计划中 |
+
 
 ### 🏗️ 项目实验
 | 实验 | 简介 | 难度 | 状态 |
 |------|------|------|------|
-| 全栈 Web 应用 | 从零开始构建完整的 Web 应用 | ⭐⭐⭐ 高级 | 📝 计划中 |
-| API 服务开发 | RESTful API 和 GraphQL 服务开发 | ⭐⭐ 中级 | 📝 计划中 |
-| 移动应用开发 | React Native/Flutter 移动应用实践 | ⭐⭐⭐ 高级 | 📝 计划中 |
-| DevOps 自动化 | CI/CD 流水线和基础设施即代码 | ⭐⭐⭐ 高级 | 📝 计划中 |
+| Space Shooting | 用 Spark + Coding Agent + GitHub Copilot 从零开始构建页游| ⭐⭐⭐ 高级 | [Space Shooting](https://github.com/ghcpSharing/space-shooter-game/blob/lab-instruction/labs/INSTRUCTIONS.md) |
 
 ## 🤝 实验状态说明
 
