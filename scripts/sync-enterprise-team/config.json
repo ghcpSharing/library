@@ -1,0 +1,12 @@
+{
+  "enterprise": "xxx",
+  "teams": [
+    {
+      "name": "xxx",
+      "members": [
+        {"email": "xxx@gmail.com", "username": "xxx"},
+        {"email": "xxx@qq.com", "username": "xxx"}
+      ]
+    }
+  ]
+}
