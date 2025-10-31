@@ -64,18 +64,6 @@ filename = "usernames.txt"  # 用户名列表文件
 python invitemember-org-login.py
 ```
 
-### 方案三：通过邮箱邀请用户加入企业
-
-```python
-# 编辑 invitemember-ent-email.py
-token = "your_personal_access_token"  # 你的 Personal Access Token
-ENTERPRISE = "your_enterprise_name"  # 你的企业名
-filename = "usermails.txt"  # 邮箱列表文件
-
-# 运行脚本
-python invitemember-ent-email.py
-```
-
 ## 📋 配置示例
 
 ### usermails.txt 格式
