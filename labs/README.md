@@ -8,8 +8,8 @@
 | 实验 | 简介 | 难度 | 状态 |
 |------|------|------|------|
 | Space Shooting | 用 Spark + Coding Agent + GitHub Copilot 从零开始构建页游| ⭐⭐⭐ 高级 | [Space Shooting](https://github.com/ghcpSharing/space-shooter-game/blob/lab-instruction/labs/INSTRUCTIONS.md) |
-| Copilot Agents 完整开发工作流 | 使用三大 Agent 类型配合 GitHub Advanced Security 构建 OKR 管理应用 | ⭐⭐⭐ 高级 | [Agents Lab](agents/README.md) |
 | AutoWeb E2E 测试生成 | 使用 AI Agent + Playwright MCP 自动生成 Dify Workflow E2E 测试 | ⭐⭐⭐ 高级 | [AutoWeb](https://github.com/ghcpSharing/autoweb) |
+| Copilot Agents 完整开发工作流 | 使用三大 Agent 类型配合 GitHub Advanced Security 构建 OKR 管理应用 | ⭐⭐⭐ 高级 | [Agents Lab](agents/README.md) |
 
 ## 🤝 实验状态说明
 
