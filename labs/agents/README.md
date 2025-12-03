@@ -533,13 +533,17 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 <img width="1517" height="860" alt="image" src="https://github.com/user-attachments/assets/c265da61-120c-4b2f-ba7c-062b03158deb" />
 
-它会按照 Prompt 的要求，将 Review Comments 放入 `thinking/background-reviewer.md`。 后续仍然可以在 VSCode 中调用  Coder 来按其审查意见来改代码，本 Lab 不再展开
+它会按照 Prompt 的要求，将 Review Comments 放入 `thinking/background-reviewer.md`。 将 VSCode 中调用  Coder 来按其审查意见提交至 Remote 仓库改代码，交给 Cloud Agent 进一步完善，本 Lab 不再展开
 
 ### 4.3 GitHub Copilot Code Review - 
 
 在 feature 分支向 main 分支的 PR 中，可选择请 Copilot 审查代码
 
 <img width="1517" height="889" alt="image" src="https://github.com/user-attachments/assets/2f79ffe8-e8e9-4ed3-a819-7983b1129b90" />
+
+Copilot 会在当前 PR 中列出它对不同的文件修改意见，并能选择 Implment Sugesstion 让 Copilot 再开启 Cloud Agent 模式来修改，当然也可以通过 Resovle Conversation 来忽略它的意见
+
+<img width="956" height="2049" alt="image" src="https://github.com/user-attachments/assets/65b5c714-22f3-4b59-8a1b-d36269852d4a" />
 
 ---
 
