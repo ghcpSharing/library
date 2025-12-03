@@ -241,102 +241,7 @@ sequenceDiagram
 
 **Prompt 文件**: `.github/prompts/review-background.prompt.md`
 
-关键配置点：
-```markdown
-## 审查重点
-1. 边界条件检查
-   - 空值/null/undefined 处理
-   - 数组边界（空数组、单元素、大数组）
-   - 数值边界（0、负数、溢出）
-   - 并发条件（竞态、死锁）
-
-2. 性能优化建议
-   - 算法复杂度分析
-   - 数据库查询优化（N+1 问题）
-   - 缓存策略建议
-   - 资源管理（连接、内存）
-```
-
 **输出报告**: `thinking/background-reviewer.md`
-
-报告结构：
-- 边界条件问题（按风险等级分类）
-- 性能优化建议（包含代码示例）
-- 修复优先级排序
-- 整体质量评估
-
-#### 实际使用流程
-
-```bash
-# 1. 开发者完成代码
-@sre 完成代码，准备提交
-
-# 2. SRE Agent 提交到本地
-git add .
-git commit -m "feat: implement OKR CRUD API"
-
-# 3. 触发并行审查
-# 前台（开发者操作）
-@reviewer 请审查代码
-
-# 后台（自动启动）
-Background Session 根据 review-background.prompt.md 开始审查
-→ 扫描 git diff
-→ 分析边界条件和性能
-→ 生成报告到 thinking/background-reviewer.md
-
-# 4. 等待审查完成（并行进行）
-⏱️  Cloud Agent: 约 30-60 秒
-⏱️  Background Session: 约 45-90 秒
-⏱️  总耗时: 约 60-90 秒（取最长者）
-
-# 5. 查看综合反馈
-- VS Code Chat: 查看 @reviewer 的实时反馈
-- 打开文件: thinking/background-reviewer.md
-
-# 6. 修复问题并推送
-根据两份报告修复 → git push
-```
-
-#### 审查报告示例
-
-**Cloud Agent 反馈（VS Code Chat）**:
-```
-✅ 代码整体符合团队规范
-⚠️  发现 2 个安全问题：
-1. /api/okr.js:45 - 用户输入未转义，存在 XSS 风险
-2. /db/query.js:23 - SQL 拼接可能导致注入
-
-💡 建议：
-- 使用参数化查询
-- 添加输入验证中间件
-```
-
-**Background Session 报告（文件）**:
-```markdown
-## 边界条件问题
-
-### 🔴 高风险
-文件: `api/okr.js:78`
-问题: 未处理空数组情况
-风险: 当用户无 OKR 时，`results[0].id` 抛出 TypeError
-
-修复建议:
-\`\`\`javascript
-const firstOKR = results.length > 0 ? results[0] : null;
-if (!firstOKR) return res.status(404).json({error: 'No OKRs found'});
-\`\`\`
-
-## 性能优化建议
-
-### ⚡ 关键瓶颈
-文件: `services/okr-service.js:34`
-问题: N+1 查询问题，循环内调用数据库
-时间复杂度: O(n) 次数据库查询
-
-优化方案: 使用 JOIN 或批量查询
-预期收益: 查询时间从 500ms → 50ms（10x 提升）
-```
 
 ---
 
@@ -354,10 +259,9 @@ GitHub Advanced Security (GHAS) 是 GitHub 的企业级安全解决方案，提�
 | **Secret Scanning** | 扫描提交中的密钥和凭证 | ✅ 公开仓库 |
 | **Dependency Review** | 依赖项漏洞检测 | ✅ 公开仓库 |
 | **Copilot Autofix** | AI 驱动的漏洞自动修复 | ✅ 公开仓库<br/>✅ 企业私有仓库 |
-| **Code Quality** | 代码质量问题检测 | 🔒 公开预览 |
+| **Code Quality** | 代码质量问题检测与修复 | 🔒 GitHub Team/Enterprise Cloud<br/>（公开预览中） |
 
 **许可要求：**
-- 公开仓库：免费使用所有功能
 - 私有仓库：需要 GitHub Enterprise + GHAS 许可
 
 ---
@@ -377,8 +281,10 @@ Code Scanning 使用 CodeQL（GitHub 的语义代码分析引擎）扫描代码�
 - C/C++/C#
 - Go
 - Ruby
+- Rust
+- Swift
 
-**配置方式：**
+**配置示例：**
 
 ```yaml
 # .github/workflows/codeql-analysis.yml
@@ -422,120 +328,110 @@ jobs:
       uses: github/codeql-action/analyze@v3
 ```
 
-**常见漏洞类型：**
-
-| CWE | 漏洞类型 | 示例 |
-|-----|---------|------|
-| CWE-79 | XSS 跨站脚本 | 未转义的用户输入渲染到 HTML |
-| CWE-89 | SQL 注入 | 拼接 SQL 字符串 |
-| CWE-78 | 命令注入 | 未验证的 shell 命令执行 |
-| CWE-22 | 路径遍历 | 未过滤的文件路径访问 |
-| CWE-798 | 硬编码凭证 | 代码中的密码/API Key |
-| CWE-502 | 不安全反序列化 | eval() 执行用户输入 |
-
 ---
 
 ### 2.3 Copilot Autofix（自动修复）
 
-**核心价值：**
-传统的安全扫描只告诉你"有问题"，但 Autofix 直接给出"如何修复"的代码建议。
+**产品定位：**
+Copilot Autofix 是 Code Scanning 的扩展功能，利用大语言模型（GPT-4.1）为安全告警生成针对性的修复建议，帮助开发者避免引入新的安全漏洞。
+
+**可用性：**
+- ✅ 所有 GitHub.com 公开仓库
+- ✅ 启用 GitHub Code Security 的组织私有/内部仓库
+- **无需** GitHub Copilot 订阅即可使用
+
+**支持语言：**
+C#、C/C++、Go、Java/Kotlin、Swift、JavaScript/TypeScript、Python、Ruby、Rust
 
 **工作流程：**
 
 ```mermaid
 graph LR
-    A[Code Scanning<br/>检测漏洞] --> B[CodeQL 分析<br/>理解上下文]
-    B --> C[LLM 生成<br/>修复建议]
-    C --> D[开发者审查<br/>应用修复]
-    D --> E[CI 验证<br/>测试通过]
+    A[CodeQL 检测漏洞] --> B[发送至 LLM<br/>SARIF + 代码片段 + 查询帮助]
+    B --> C[GPT-4.1 生成<br/>修复建议 + 解释]
+    C --> D[内部测试验证]
+    D --> E[PR 中展示建议]
+    E --> F[开发者审查应用]
 ```
 
-**触发条件：**
-- Pull Request 中检测到漏洞
-- 自动生成修复建议（通常在几秒内）
-- 以 PR Comment 形式展示
+**LLM 输入数据：**
+- CodeQL 告警数据（SARIF 格式）
+- 源码位置、接收位置周围的代码片段
+- 相关文件的前 ~10 行
+- CodeQL 查询的帮助文档
 
-**示例：SQL 注入修复**
+**质量保障：**
+GitHub 使用自动化测试框架持续监控建议质量，包含 2,300+ 告警的测试集，验证：
+1. 建议是否修复了告警？
+2. 是否引入新的告警？
+3. 是否引入语法错误？
+4. 是否改变了测试输出？
 
-**原始代码（存在漏洞）：**
-```typescript
-// ❌ 不安全：直接拼接 SQL
-app.get('/users/:id', (req, res) => {
-  const userId = req.params.id;
-  const query = `SELECT * FROM users WHERE id = ${userId}`;
-  db.query(query, (err, result) => {
-    res.json(result);
-  });
-});
-```
+**已知限制：**
 
-**Autofix 建议：**
-```typescript
-// ✅ 安全：使用参数化查询
-app.get('/users/:id', (req, res) => {
-  const userId = req.params.id;
-  const query = 'SELECT * FROM users WHERE id = ?';
-  db.query(query, [userId], (err, result) => {
-    res.json(result);
-  });
-});
-```
+| 限制类型 | 说明 |
+|---------|------|
+| **非确定性** | 相同告警可能生成不同建议，或无法生成建议 |
+| **问题复杂度** | 跨文件的复杂数据流问题可能难以解决 |
+| **文件大小** | 超大文件可能导致上下文被截断 |
+| **语法错误** | 可能建议不正确的代码位置或语法 |
+| **语义错误** | 可能改变程序行为，需要良好的测试覆盖 |
+| **部分修复** | 可能仅部分解决漏洞或仅保留部分功能 |
+| **依赖风险** | 可能建议添加不安全或不存在的依赖 |
 
 **负责任的使用原则：**
-1. **始终审查 Autofix 建议** - AI 可能产生不完美的修复
-2. **验证业务逻辑** - 确保修复不破坏功能
-3. **运行完整测试** - CI 必须通过
-4. **理解修复原理** - 学习安全编码最佳实践
+1. **始终审查建议** - AI 建议可能不完美，需要开发者批判性评估
+2. **验证修复有效性** - 确保告警被解决且未引入新问题
+3. **运行完整测试** - CI 必须通过，验证功能行为不变
+4. **检查依赖变更** - 审查任何依赖添加/更新的安全性
+5. **理解修复原理** - 学习安全编码最佳实践
+
+**数据隐私：**
+- Autofix 处理的数据 **不会** 用于 LLM 训练
+- 受 GitHub Advanced Security 现有条款约束
 
 ---
 
 ### 2.4 Code Quality（代码质量检查）
 
-**功能范围（公开预览）：**
-- 代码复杂度分析
-- 代码异味检测（Code Smells）
-- 可维护性评分
-- 重复代码识别
+**产品定位：**
+GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮助团队识别代码质量风险、应用 Copilot 自动修复，并通过规则集强制执行质量标准。
 
-**集成方式：**
-Code Quality 作为 Code Scanning 的扩展，无需额外配置，自动在 PR 中显示质量问题。
+**核心功能：**
+- 在 **Pull Request** 和 **仓库扫描** 中标记代码质量问题
+- 提供 **Copilot 自动修复** 建议（一键应用）
+- 通过 **仓库仪表盘** 追踪可靠性和可维护性评分
+- 使用 **Rulesets** 强制执行代码质量标准，阻止不合规的代码合并
+- 支持将修复任务分配给 **Copilot coding agent**
 
-**质量问题示例：**
-- 过长的函数（> 50 行）
-- 深层嵌套（> 4 层）
-- 未使用的变量
-- 魔法数字（Magic Numbers）
-- 缺少错误处理
+**支持语言（基于 CodeQL 规则分析）：**
+- C#、Go、Java、JavaScript、Python、Ruby、TypeScript
 
----
+**AI 分析能力：**
+- 除规则分析外，还提供 AI 驱动的分析结果（显示在 "AI findings" 仪表盘）
+- AI 分析仅检查最近推送到默认分支的文件，可能识别更多语言的问题
 
-### 2.5 实战配置清单
+**可用性要求：**
+- 仅适用于组织拥有的仓库（GitHub Team 或 GitHub Enterprise Cloud）
+- 公开预览期间不收费，但扫描会消耗 GitHub Actions 分钟数
+- **无需** Copilot 或 Code Security 许可即可使用
 
-**启用 GHAS 的步骤：**
-
-1. **仓库设置**：
-   - Settings → Security → Code security and analysis
-   - 启用 "CodeQL analysis"
-   - 启用 "Dependency graph"
-   - 启用 "Dependabot alerts"
-
-2. **配置 Workflow**：
-   - 添加 `.github/workflows/codeql-analysis.yml`
-   - 添加 `.github/workflows/security.yml`（依赖扫描）
-
-3. **设置分支保护**：
-   - Settings → Branches → Add rule
-   - 要求 "Code scanning results" 通过
-   - 要求 "Status checks" 通过
-
-4. **配置通知**：
-   - Settings → Notifications
-   - 订阅 Security alerts
+**检测结果展示位置：**
+- **Pull Request**: `github-code-quality[bot]` 会发表评论，包含问题说明和 Copilot Autofix 建议
+- **仓库 Security 标签页**: "Standard findings"（CodeQL 分析）和 "AI findings"（AI 分析）
 
 ---
 
 ## 第三部分：实战项目 - OKR 管理应用
 
+本部分的内容过程将会以 `https://github.com/nikadwangorg/agents-demo.git` 仓库为过程记录。
+- Initialize 一个新的 GitHub 仓库 `agents-demo`，
+- 将 `.github/agents` 目录放到该仓库中，后续在 VS Code 中使用 GitHub Copilot Custom Agents 进行开发。
+- 开启 GitHub Advanced Security 相关功能
+   - Settings → Security → Code security and analysis
+   - 启用 "CodeQL analysis"
+   - 启用 "Dependency graph"
+   - 启用 "Dependabot alerts"
 ### 3.1 项目需求
 
 **项目背景：**
