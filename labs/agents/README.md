@@ -559,7 +559,8 @@ Copilot 会在当前 PR 中列出它对不同的文件修改意见，并能选�
 <img width="1298" height="138" alt="image" src="https://github.com/user-attachments/assets/e3437a27-39c8-4acf-b383-1992a783ccc2" />
 
 
-### 5.2   AI Findings
+### 5.2   Findings
+<img width="1822" height="435" alt="image" src="https://github.com/user-attachments/assets/76f8ccaa-a9d8-4e5d-be68-2ede2f70e646" />
 
 
 ### 5.3 Autofix 
@@ -655,6 +656,9 @@ graph TB
    - 限制 `.github-private` 仓库访问权限
    - 审计 Agent 执行日志
 
+3. **云端VibeCoding**
+   - 当代码已经存放在 GitHub Repo 后，可直接在移动端设备发送工作指令
+   - 构建好 CI/CD 脚本，Cloud Agent 完成工作后可以在运行环境中测试
 ---
 
 ### 7.3 GitHub Copilot Security 最佳实践
