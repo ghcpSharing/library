@@ -496,35 +496,21 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 
 ---
+以上均为在  VS Code 中 GitHub Copilot Local Agent 的 Vibe Coding 场景
 
----
 
 ## 第四部分：Cloud Agent & Background Copilot Chat Session 代码审查
 
+
 ---
+<img width="1154" height="642" alt="image" src="https://github.com/user-attachments/assets/935779cb-b86c-42dd-84c7-94bd685e2d43" />
 
-### 4.1 Reviewer 审查流程
+### 4.1 Cloud Agent - Reviewer 审查
 
-**当 SRE 创建 PR 后，Reviewer 自动执行：**
+<img width="1012" height="755" alt="image" src="https://github.com/user-attachments/assets/4b64fc01-97e1-4306-9b6f-b0bb3a81827a" />
 
-1. **获取变更：**
-```bash
-git diff main...feature/okr-management-system
-```
 
-2. **代码质量检查：**
-   - ✅ 命名规范：驼峰式，语义清晰
-   - ✅ 错误处理：所有异步函数都有 try-catch
-   - ⚠️  建议：`ObjectiveService` 的 `updateObjectiveProgress` 方法可提取为独立函数
-
-3. **安全扫描（CodeQL）：**
-```bash
-codeql database create codeql-db --language=javascript --source-root=.
-codeql database analyze codeql-db \
-  --format=sarif-latest \
-  --output=results.sarif \
-  codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
-```
+<img width="1009" height="507" alt="image" src="https://github.com/user-attachments/assets/2bf3964a-ae7b-4b88-87e8-efe0162df01c" />
 
 4. **输出审查报告（作为 PR Comment）：**
 
