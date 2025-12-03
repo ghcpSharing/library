@@ -47,7 +47,12 @@ handoffs: []
     2. 读取版本号（从 `package.json` 或 Git Tag）
     3. 构建 Docker 镜像 (`docker build -t <IMAGE>:<TAG>`)
     4. 推送镜像到 Registry（Docker Hub/ECR/GCR）
-    5. 配置 kubectl（使用项目根目录的 kubeconfig 文件，需先存储为 GitHub Secret `KUBE_CONFIG`）
+    5. 配置 kubectl（使用 GitHub Org Secret `KUBE_CONFIG`，需 Base64 解码）：
+       ```bash
+       mkdir -p $HOME/.kube
+       echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+       chmod 600 $HOME/.kube/config
+       ```
     6. 部署到 K8s 集群（智能部署策略）：
        - **方式一（推荐）**：先使用 `sed` 或 `envsubst` 替换 deployment.yaml 中的镜像占位符，然后执行 `kubectl apply -f k8s/`
          ```bash
@@ -67,9 +72,18 @@ handoffs: []
     8. 健康检查（获取 LoadBalancer IP 并验证探活端点）
   - 完整 YAML 内容。
   - **K8s 认证配置**：
-    - 使用项目中的 kubeconfig 文件（路径：项目根目录下的 kubeconfig 文件）
-    - 需要将该 kubeconfig 内容存储为 GitHub Repository Secret（名称：`KUBE_CONFIG`）
-    - Workflow 中使用该 secret 配置 kubectl 认证
+    - 使用 GitHub Org 级别 Secret `KUBE_CONFIG`（已配置，内容为 Base64 编码的 kubeconfig）
+    - Workflow 中解码并写入 `$HOME/.kube/config`：
+      ```yaml
+      - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+      
+      - name: Verify cluster connection
+        run: kubectl cluster-info
+      ```
   - **镜像版本管理**：
     - 在 k8s/deployment.yaml 中使用占位符 `__IMAGE_TAG__` 代替硬编码的镜像版本
     - 示例：`image: ghcr.io/nikadwangorg/.github-private/okr-system:__IMAGE_TAG__`

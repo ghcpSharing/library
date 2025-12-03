@@ -26,7 +26,7 @@ GitHub Copilot Agents 是基于大语言模型的智能助手，能够理解上�
 graph TB
     subgraph "开发环境"
         IDE[VS Code / IDE]
-        CLI[Terminal / CLI]
+        BG[Background Session<br/>后台并行任务]
     end
     
     subgraph "Local Custom Agents"
@@ -36,8 +36,12 @@ graph TB
         A4[SRE<br/>发布部署]
     end
     
+    subgraph "并行代码审查"
+        CA[Cloud Agent<br/>@reviewer<br/>规范+安全]
+        BGS[Background Session<br/>边界+性能]
+    end
+    
     subgraph "GitHub Cloud"
-        CA[Cloud Agents<br/>Reviewer]
         GH[GitHub Platform]
     end
     
@@ -52,13 +56,14 @@ graph TB
     A1 -->|handoff| A2
     A2 -->|handoff| A3
     A3 -->|handoff| A4
-    A4 -->|commit code| IDE
+    A4 -->|commit local| IDE
     
-    CLI --> A1
+    IDE -->|前台调用| CA
+    BG -->|后台并行| BGS
+    CA -->|反馈| IDE
+    BGS -->|输出到 thinking/| IDE
     
-    IDE -->|call| CA
-    CA -->|review feedback| IDE
-    IDE -->|push after review| GH
+    IDE -->|审查通过后 push| GH
     
     GH --> CS
     GH --> AF
@@ -125,33 +130,31 @@ graph TB
 
 ---
 
-### 1.4 Copilot CLI（命令行助手）
+### 1.4 Copilot CLI / Background Session（后台并行任务）
 
-**定义：** 在终端中运行的 AI 助手，也称为 **Copilot Background Session**。
+**定义：** GitHub Copilot 的终端形态 coding agent，类似 OpenAI Codex 或 Claude Code。在 VS Code 中称为 **Copilot Background Session**，能够在后台并行执行编程任务。
 
 **特点：**
-- ✅ 自然语言转命令行
-- ✅ 实时上下文感知（当前目录、Git 状态）
-- ✅ 支持复杂命令组合
-- ✅ 解释命令含义和风险
-- ✅ 脚本生成与调试
+- ✅ 独立的 coding agent，不只是命令执行器
+- ✅ **并行执行能力**：前台 Chat Agent 工作时，Background Session 可同时在后台处理任务
+- ✅ 自然语言理解代码任务
+- ✅ 实时上下文感知（当前目录、Git 状态、代码变更）
+- ✅ 可以生成、分析、审查代码
+- ✅ 结果可输出到文件（如 `thinking/` 目录）
 
 **适用场景：**
-- Git 操作（分支管理、合并冲突）
-- 系统管理任务
-- 快速脚本编写
-- 命令行工具学习
+- **并行代码审查**：前台 Cloud Agent 审查规范，后台审查性能和边界条件
+- 后台运行测试套件和覆盖率分析
+- 持续监控代码质量
+- 并行开发不同模块
+- 脚本生成与优化建议
 
-**使用示例：**
-```bash
-# 启动 Copilot CLI
-copilot
+**本 Lab 使用场景：**
+在代码提交前的并行审查阶段：
+- **前台（VS Code Chat）**: 调用 `@reviewer` Cloud Agent 进行规范和安全审查
+- **后台（Background Session）**: 同时进行边界条件和性能优化审查，输出到 `thinking/background-reviewer.md`
 
-# 自然语言提问
-> "列出所有未合并的分支"
-> "创建一个 PR 到 main 分支"
-> "生成一个备份脚本"
-```
+**配置位置：** `.github/prompts/review-background.prompt.md`
 
 ---
 
@@ -160,10 +163,11 @@ copilot
 ```mermaid
 sequenceDiagram
     participant Dev as 开发者
-    participant IDE as VS Code
+    participant IDE as VS Code Chat
     participant Local as Custom Agents
-    participant CLI as Copilot CLI
-    participant Cloud as Cloud Agents
+    participant Cloud as Cloud Agent (@reviewer)
+    participant BG as Background Session
+    participant File as thinking/background-reviewer.md
     participant Git as Git Repo
     participant GH as GitHub Platform
     
@@ -177,23 +181,161 @@ sequenceDiagram
     IDE->>Local: handoff to @coder
     Local->>IDE: 生成代码
     
-    Dev->>CLI: "运行测试并检查覆盖率"
-    CLI->>Dev: 执行 npm test
-    
     IDE->>Local: handoff to @sre
     Local->>Git: 提交代码到本地
     
-    Note over IDE,Cloud: Push 前的代码审查
-    IDE->>Cloud: 调用 @reviewer 进行代码审查
-    Cloud->>IDE: 返回审查反馈和建议
+    Note over IDE,BG: 并行代码审查（两个审查者）
     
-    Dev->>IDE: 根据反馈修复问题
+    par 前台：规范与安全审查
+        IDE->>Cloud: 调用 @reviewer
+        Note over Cloud: 检查：编码规范、安全漏洞、API 设计
+        Cloud->>IDE: 返回审查反馈
+    and 后台：边界与性能审查
+        IDE->>BG: 启动 Background Session
+        Note over BG: 使用 review-background.prompt.md<br/>检查：边界条件、性能优化
+        BG->>File: 写入审查报告
+        BG->>IDE: 审查完成通知
+    end
+    
+    IDE->>Dev: 显示综合反馈<br/>- Cloud Agent 反馈（Chat）<br/>- Background 报告（文件）
+    
+    Dev->>IDE: 根据两份反馈修复问题
     IDE->>Git: Push 代码
     Git->>GH: 创建 PR
     
-    GH->>GH: Code Scanning
-    GH->>GH: Autofix 生成修复建议
-    GH->>Dev: 在 PR 中显示扫描结果
+    Note over GH: GitHub Advanced Security
+    GH->>GH: Code Scanning + Autofix
+    GH->>Dev: PR 中显示扫描结果
+```
+
+---
+
+### 1.6 并行代码审查工作流详解
+
+本 Lab 的核心创新是在 push 代码前引入**并行双审查机制**，利用 Cloud Agent 和 Background Session 的协作，实现更全面的代码质量保障。
+
+#### 审查者分工
+
+| 审查者 | 角色定位 | 审查重点 | 输出位置 | 触发方式 |
+|--------|---------|---------|---------|---------|
+| **Cloud Agent<br/>@reviewer** | 组织级规范守护者 | • 编码规范一致性<br/>• 安全漏洞检测<br/>• API 设计标准<br/>• 架构最佳实践 | VS Code Chat<br/>（实时反馈） | 前台调用 |
+| **Background Session** | 代码健壮性专家 | • **边界条件检查**<br/>• **性能优化建议**<br/>• 潜在边缘案例<br/>• 算法复杂度分析 | `thinking/background-reviewer.md`<br/>（结构化报告） | 后台并行执行 |
+
+#### 并行审查优势
+
+1. **时间效率提升**
+   - 串行审查：耗时 = 审查1 + 审查2
+   - 并行审查：耗时 = max(审查1, 审查2)
+   - 节省约 **40-50%** 的审查等待时间
+
+2. **审查覆盖更全面**
+   - Cloud Agent 专注"是否符合标准"
+   - Background Session 专注"是否足够健壮"
+   - 互补视角，降低遗漏风险
+
+3. **反馈形式多样**
+   - 实时交互反馈（Chat）+ 结构化文档（Markdown）
+   - 适合不同场景的信息消费方式
+
+#### Background Session 配置
+
+**Prompt 文件**: `.github/prompts/review-background.prompt.md`
+
+关键配置点：
+```markdown
+## 审查重点
+1. 边界条件检查
+   - 空值/null/undefined 处理
+   - 数组边界（空数组、单元素、大数组）
+   - 数值边界（0、负数、溢出）
+   - 并发条件（竞态、死锁）
+
+2. 性能优化建议
+   - 算法复杂度分析
+   - 数据库查询优化（N+1 问题）
+   - 缓存策略建议
+   - 资源管理（连接、内存）
+```
+
+**输出报告**: `thinking/background-reviewer.md`
+
+报告结构：
+- 边界条件问题（按风险等级分类）
+- 性能优化建议（包含代码示例）
+- 修复优先级排序
+- 整体质量评估
+
+#### 实际使用流程
+
+```bash
+# 1. 开发者完成代码
+@sre 完成代码，准备提交
+
+# 2. SRE Agent 提交到本地
+git add .
+git commit -m "feat: implement OKR CRUD API"
+
+# 3. 触发并行审查
+# 前台（开发者操作）
+@reviewer 请审查代码
+
+# 后台（自动启动）
+Background Session 根据 review-background.prompt.md 开始审查
+→ 扫描 git diff
+→ 分析边界条件和性能
+→ 生成报告到 thinking/background-reviewer.md
+
+# 4. 等待审查完成（并行进行）
+⏱️  Cloud Agent: 约 30-60 秒
+⏱️  Background Session: 约 45-90 秒
+⏱️  总耗时: 约 60-90 秒（取最长者）
+
+# 5. 查看综合反馈
+- VS Code Chat: 查看 @reviewer 的实时反馈
+- 打开文件: thinking/background-reviewer.md
+
+# 6. 修复问题并推送
+根据两份报告修复 → git push
+```
+
+#### 审查报告示例
+
+**Cloud Agent 反馈（VS Code Chat）**:
+```
+✅ 代码整体符合团队规范
+⚠️  发现 2 个安全问题：
+1. /api/okr.js:45 - 用户输入未转义，存在 XSS 风险
+2. /db/query.js:23 - SQL 拼接可能导致注入
+
+💡 建议：
+- 使用参数化查询
+- 添加输入验证中间件
+```
+
+**Background Session 报告（文件）**:
+```markdown
+## 边界条件问题
+
+### 🔴 高风险
+文件: `api/okr.js:78`
+问题: 未处理空数组情况
+风险: 当用户无 OKR 时，`results[0].id` 抛出 TypeError
+
+修复建议:
+\`\`\`javascript
+const firstOKR = results.length > 0 ? results[0] : null;
+if (!firstOKR) return res.status(404).json({error: 'No OKRs found'});
+\`\`\`
+
+## 性能优化建议
+
+### ⚡ 关键瓶颈
+文件: `services/okr-service.js:34`
+问题: N+1 查询问题，循环内调用数据库
+时间复杂度: O(n) 次数据库查询
+
+优化方案: 使用 JOIN 或批量查询
+预期收益: 查询时间从 500ms → 50ms（10x 提升）
 ```
 
 ---
@@ -1055,12 +1197,25 @@ graph TB
     A2 --> |thinking/architect.md| A3[@coder<br/>代码实现]
     A3 --> |thinking/coder.md| A4[@sre<br/>CI/CD 配置]
     
-    A4 --> Git[创建 Git 分支<br/>提交代码]
-    Git --> PR[创建 Pull Request]
+    A4 --> GitCommit[Git Commit<br/>提交到本地]
+    
+    GitCommit --> Review{并行代码审查}
+    
+    Review --> |前台| CloudReview[@reviewer<br/>Cloud Agent<br/>规范+安全]
+    Review --> |后台| BGReview[Background Session<br/>边界+性能]
+    
+    CloudReview --> ReviewResult[审查反馈汇总]
+    BGReview --> |thinking/background-reviewer.md| ReviewResult
+    
+    ReviewResult --> FixIssues{需要修复?}
+    FixIssues --> |是| LocalFix[修复问题]
+    LocalFix --> GitCommit
+    
+    FixIssues --> |否| GitPush[Git Push]
+    GitPush --> PR[创建 Pull Request]
     
     PR --> CI[GitHub Actions CI<br/>运行测试]
     PR --> CS[Code Scanning<br/>CodeQL 分析]
-    PR --> CA[@reviewer<br/>代码审查]
     
     CS --> AF{发现漏洞?}
     AF --> |是| Autofix[Copilot Autofix<br/>生成修复建议]
@@ -1069,7 +1224,6 @@ graph TB
     
     AF --> |否| Merge{审查通过?}
     CI --> Merge
-    CA --> Merge
     
     Merge --> |是| CD[GitHub Actions CD<br/>构建镜像]
     CD --> K8s[部署到 Kubernetes]
@@ -1077,7 +1231,7 @@ graph TB
     Health --> Done([部署完成])
     
     Merge --> |否| Fix[修复问题]
-    Fix --> Git
+    Fix --> GitPush
 ```
 
 ---
