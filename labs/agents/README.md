@@ -669,16 +669,16 @@ const unusedVar = fetchSomeData();
 
 ```mermaid
 graph TB
-    Start([开发者输入需求]) --> A1[@analyst<br/>需求分析]
-    A1 --> |thinking/analyst.md| A2[@architect<br/>架构设计]
-    A2 --> |thinking/architect.md| A3[@coder<br/>代码实现]
-    A3 --> |thinking/coder.md| A4[@sre<br/>CI/CD 配置]
+    Start([开发者输入需求]) --> A1["#64;analyst<br/>需求分析"]
+    A1 --> |thinking/analyst.md| A2["#64;architect<br/>架构设计"]
+    A2 --> |thinking/architect.md| A3["#64;coder<br/>代码实现"]
+    A3 --> |thinking/coder.md| A4["#64;sre<br/>CI/CD 配置"]
     
     A4 --> GitCommit[Git Commit<br/>提交到本地]
     
     GitCommit --> Review{并行代码审查}
     
-    Review --> |前台| CloudReview[@reviewer<br/>Cloud Agent<br/>规范+安全]
+    Review --> |前台| CloudReview["#64;reviewer<br/>Cloud Agent<br/>规范+安全"]
     Review --> |后台| BGReview[Background Session<br/>边界+性能]
     
     CloudReview --> ReviewResult[审查反馈汇总]
