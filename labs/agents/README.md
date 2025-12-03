@@ -521,7 +521,9 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 <img width="1009" height="507" alt="image" src="https://github.com/user-attachments/assets/2bf3964a-ae7b-4b88-87e8-efe0162df01c" />
 <img width="1895" height="872" alt="image" src="https://github.com/user-attachments/assets/02c9eb5c-d57c-47f4-a12c-16cbde07a71a" />
 
-可在 GitHub 中的 Copilot 的Agent 会话列表下能看到对应的工作任务，它通过 PR 的方式来 Track 对应的工作任务
+可在 GitHub 中的 Copilot 的Agent 会话列表下能看到对应的工作任务，它通过 PR 的方式来 Track 对应的工作任务,下面为 Review 结果
+<img width="1893" height="907" alt="image" src="https://github.com/user-attachments/assets/319f72e7-0779-4b90-a852-ec6447e8fe24" />
+
 
 
 
@@ -531,8 +533,13 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 <img width="1517" height="860" alt="image" src="https://github.com/user-attachments/assets/c265da61-120c-4b2f-ba7c-062b03158deb" />
 
-它会按照 Prompt 的要求，将 Review Comments 放入 `thinking/background-reviewer.md`
+它会按照 Prompt 的要求，将 Review Comments 放入 `thinking/background-reviewer.md`。 后续仍然可以在 VSCode 中调用  Coder 来按其审查意见来改代码，本 Lab 不再展开
 
+### 4.3 GitHub Copilot Code Review - 
+
+在 feature 分支向 main 分支的 PR 中，可选择请 Copilot 审查代码
+
+<img width="1517" height="889" alt="image" src="https://github.com/user-attachments/assets/2f79ffe8-e8e9-4ed3-a819-7983b1129b90" />
 
 ---
 
