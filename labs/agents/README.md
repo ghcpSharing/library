@@ -501,8 +501,11 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 ## 第四部分： 代码审查
 
+
 本场景中使用不同 Agents 场景来做代码审查，包含 Cloud Agent， Background Copilot Session 及  GitHub PR 的 Copilot Code Review
+
 ---
+
 在 VSCode Sidebar中打开 Agents 后可以看到创建不同的 Agent Session 模式:
 - 当前 Local Agent 只能在前台独占任务执行（即同一时间只有一个 Local Agent 能执行任务），下面两种会话类别可以并行执行任务
 - Cloud Agent 是前文中定义在 ORG 下的 .github-private/agents 下的 Agent
@@ -511,65 +514,25 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 <img width="1154" height="642" alt="image" src="https://github.com/user-attachments/assets/935779cb-b86c-42dd-84c7-94bd685e2d43" />
 
 ### 4.1 Cloud Agent - Reviewer 审查
-选择 Review
+
+选择 Reviewer
+
 <img width="1012" height="755" alt="image" src="https://github.com/user-attachments/assets/4b64fc01-97e1-4306-9b6f-b0bb3a81827a" />
-
-
 <img width="1009" height="507" alt="image" src="https://github.com/user-attachments/assets/2bf3964a-ae7b-4b88-87e8-efe0162df01c" />
+<img width="1895" height="872" alt="image" src="https://github.com/user-attachments/assets/02c9eb5c-d57c-47f4-a12c-16cbde07a71a" />
+
+可在 GitHub 中的 Copilot 的Agent 会话列表下能看到对应的工作任务，它通过 PR 的方式来 Track 对应的工作任务
 
 
 
+
+### 4.2 Copilot Background Session - 选择特定的 代码审查 Prompt 
 <img width="1553" height="876" alt="image" src="https://github.com/user-attachments/assets/8826f42e-1352-40be-be32-0ce888882375" />
+
 <img width="1517" height="860" alt="image" src="https://github.com/user-attachments/assets/c265da61-120c-4b2f-ba7c-062b03158deb" />
 
-4. **输出审查报告（作为 PR Comment）：**
+它会按照 Prompt 的要求，将 Review Comments 放入 `thinking/background-reviewer.md`
 
-```markdown
-## 🤖 Reviewer Agent 代码审查报告
-
-### 变更概览
-- **分支**: feature/okr-management-system → main
-- **提交数**: 12 commits
-- **变更文件数**: 23 files
-- **代码行数**: +1,245 / -0
-
-### ✅ 优点
-- 代码结构清晰，三层架构分离良好
-- 测试覆盖率达到 85%，超过预期
-- 使用 Zod 进行输入验证，类型安全
-
-### ⚠️ 改进建议
-
-| 优先级 | 文件 | 行号 | 问题描述 | 建议 |
-|-------|------|-----|---------|-----|
-| Medium | src/services/ObjectiveService.ts | 42 | 进度计算逻辑重复 | 提取为 `calculateAverageProgress()` 工具函数 |
-| Low | src/controllers/ObjectiveController.ts | 15 | 缺少请求日志 | 添加结构化日志（如 pino） |
-
-### 🔒 安全扫描报告
-
-#### 扫描结果
-- **工具**: CodeQL
-- **查询套件**: javascript-security-extended
-- **扫描时间**: 2025-12-03 06:00
-
-#### ✅ 无高危漏洞
-- 未发现 SQL 注入、XSS、命令注入等高危漏洞
-- 未发现硬编码凭证
-
-### 审查结论
-
-**审查状态**: ✅ 批准合并
-
-**总结**:
-- 代码质量评分: 8.5/10
-- 安全风险等级: Low
-- 建议: 可直接合并，改进建议可在后续迭代中优化
-
-### 后续行动
-- [ ] 合并 PR
-- [ ] 触发 CD 流水线
-- [ ] 验证生产环境健康状态
-```
 
 ---
 
