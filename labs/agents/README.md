@@ -52,12 +52,13 @@ graph TB
     A1 -->|handoff| A2
     A2 -->|handoff| A3
     A3 -->|handoff| A4
-    A4 -->|push code| GH
+    A4 -->|commit code| IDE
     
     CLI --> A1
     
-    GH --> CA
+    IDE -->|call| CA
     CA -->|review feedback| IDE
+    IDE -->|push after review| GH
     
     GH --> CS
     GH --> AF
@@ -162,8 +163,8 @@ sequenceDiagram
     participant IDE as VS Code
     participant Local as Custom Agents
     participant CLI as Copilot CLI
-    participant Git as Git Repo
     participant Cloud as Cloud Agents
+    participant Git as Git Repo
     participant GH as GitHub Platform
     
     Dev->>IDE: 输入需求
@@ -180,16 +181,19 @@ sequenceDiagram
     CLI->>Dev: 执行 npm test
     
     IDE->>Local: handoff to @sre
-    Local->>Git: 提交代码
-    Local->>GH: 创建 PR
+    Local->>Git: 提交代码到本地
     
-    GH->>Cloud: 触发 @reviewer
-    Cloud->>GH: 输出审查报告
+    Note over IDE,Cloud: Push 前的代码审查
+    IDE->>Cloud: 调用 @reviewer 进行代码审查
+    Cloud->>IDE: 返回审查反馈和建议
+    
+    Dev->>IDE: 根据反馈修复问题
+    IDE->>Git: Push 代码
+    Git->>GH: 创建 PR
     
     GH->>GH: Code Scanning
     GH->>GH: Autofix 生成修复建议
-    
-    Cloud->>Dev: 反馈到 IDE
+    GH->>Dev: 在 PR 中显示扫描结果
 ```
 
 ---
