@@ -551,7 +551,16 @@ Copilot 会在当前 PR 中列出它对不同的文件修改意见，并能选�
 
 ## 第五部分：GitHub Copilot on Security
 
-### 5.1 Code Quality & AI Findings
+### 5.1 启用 Code Quality
+进入 GitHub Repo -> Settings ->  Security -> Code Quality ->  Enable 
+<img width="1203" height="748" alt="image" src="https://github.com/user-attachments/assets/236bb42e-b401-4c2b-a3fe-795c04ee04dc" />
+
+它会被周期性或 `push 到 main 分支`的事件触发
+<img width="1298" height="138" alt="image" src="https://github.com/user-attachments/assets/e3437a27-39c8-4acf-b383-1992a783ccc2" />
+
+
+### 5.2   AI Findings
+
 
 ---
 
