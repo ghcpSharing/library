@@ -476,209 +476,34 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 #### Step 3: 代码实现（@Coder）
 
 **Coder 执行所有任务，生成完整代码，并测试且修正直到能正常运行。在最后将它的工作记录归纳并输出到 `thinking/coder.md`：**
+<img width="1476" height="988" alt="image" src="https://github.com/user-attachments/assets/d1e46d72-6814-4cb5-84b0-df3d36267397" />
 
+这个过程会有很多文件的生成及调试步骤，如果希望它能自动完成，需要打开 Auto Approve 让 Copilot 自主决定并持续工作。 
 
-**再点击DevSecOps， Coder 会将任务自动 handoff 到 SRE**
+这里有两个细节:
+1. 单独开了一个特性分支来完成这个场景的开发
+2. 所有的测试用例都通过
 
-```markdown
-## 实现完成报告
+**再点击 DevSecOps， Coder 会将任务自动 handoff 到 SRE**
 
-### Git 分支
-- **分支名**: `feature/okr-management-system`
-- **提交内容**: 完整的 OKR 系统实现，包含测试和部署配置
+----
 
-### 测试覆盖率
-- 单元测试覆盖率: 85%
-- 集成测试: 8 个测试用例全部通过
+#### Step 4: GitHub Workflow（@SRE）
 
-### 部署配置
-- Dockerfile: 多阶段构建，生产镜像 < 100MB
-- K8s Deployment: 3 副本，配置探针
-- K8s Service: LoadBalancer 暴露 80 端口
+**SRE 完善 DevSecOps 对应的 GitHub Workflow 文件，并创建 Pull Request，输出到 `thinking/sre.md`**
 
-### 本地验证
-```bash
-# 安装依赖
-npm install
+<img width="1235" height="999" alt="image" src="https://github.com/user-attachments/assets/d5831f78-1cfa-4455-8563-c5b1c4958ccb" />
 
-# 运行测试
-npm test
-
-# 启动服务
-npm run dev
-
-# 冒烟测试
-curl -X POST http://localhost:3000/api/objectives \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Q1 Growth","deadline":"2025-03-31"}'
-```
-```
-
-**Coder 自动 handoff 到 SRE**
 
 ---
 
-#### Step 4: 发布部署（@sre）
+---
 
-**SRE 生成 CI/CD 配置：**
-
-**`.github/workflows/ci.yml`：**
-
-```yaml
-name: CI
-
-on:
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Lint
-      run: npm run lint
-    
-    - name: Type check
-      run: npm run typecheck
-    
-    - name: Run tests
-      run: npm test -- --coverage
-    
-    - name: Upload coverage
-      uses: codecov/codecov-action@v4
-      with:
-        files: ./coverage/coverage-final.json
-```
-
-**`.github/workflows/cd.yml`：**
-
-```yaml
-name: CD
-
-on:
-  push:
-    branches: [ main ]
-    tags: [ 'v*' ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set image tag
-      id: image_tag
-      run: |
-        if [[ $GITHUB_REF == refs/tags/* ]]; then
-          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        else
-          echo "tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-        fi
-    
-    - name: Build Docker image
-      run: |
-        docker build -t ghcr.io/${{ github.repository }}/okr-system:${{ steps.image_tag.outputs.tag }} .
-    
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Push image
-      run: docker push ghcr.io/${{ github.repository }}/okr-system:${{ steps.image_tag.outputs.tag }}
-    
-    - name: Configure kubectl
-      run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
-    
-    - name: Update deployment image
-      run: |
-        sed -i "s|__IMAGE_TAG__|${{ steps.image_tag.outputs.tag }}|g" k8s/deployment.yaml
-        kubectl apply -f k8s/
-    
-    - name: Wait for rollout
-      run: kubectl rollout status deployment/okr-system -n okr-system --timeout=300s
-    
-    - name: Health check
-      run: |
-        EXTERNAL_IP=$(kubectl get svc okr-service -n okr-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-        curl -f http://${EXTERNAL_IP}/health || exit 1
-```
-
-**SRE 创建 Pull Request，输出到 `thinking/sre.md`**
+## 第四部分：Cloud Agent & Background Copilot Chat Session 代码审查
 
 ---
 
-### 3.3 使用 Copilot CLI 辅助开发
-
-**场景 1: Git 分支管理**
-
-```bash
-# 启动 Copilot CLI
-gh copilot
-
-# 自然语言提问
-> "创建一个新分支用于 OKR 功能开发"
-
-# Copilot 输出
-$ git checkout -b feature/okr-management-system
-
-# 执行确认
-> yes
-```
-
-**场景 2: 查看测试覆盖率**
-
-```bash
-> "运行测试并显示覆盖率报告"
-
-# Copilot 输出
-$ npm test -- --coverage && open coverage/index.html
-```
-
-**场景 3: 快速脚本生成**
-
-```bash
-> "生成一个脚本，备份所有 thinking 目录下的 markdown 文件"
-
-# Copilot 输出
-$ tar -czf thinking-backup-$(date +%Y%m%d).tar.gz thinking/*.md
-```
-
----
-
-## 第四部分：Cloud Agent 代码审查
-
-### 4.1 配置 Reviewer Agent（组织级）
-
-**在 GitHub Organization 中创建 `.github-private` 仓库：**
-
-结构：
-```
-.github-private/
-└── agents/
-    └── reviewer.agent.md
-```
-
-**Reviewer Agent 自动在 PR 创建时触发**
-
----
-
-### 4.2 Reviewer 审查流程
+### 4.1 Reviewer 审查流程
 
 **当 SRE 创建 PR 后，Reviewer 自动执行：**
 
