@@ -450,73 +450,23 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 1. 打开 Copilot Chat, 切换至 Analyst Agent， 这还可以看到其它 Agents(Local Custom Agents 及 Cloud Agent)。
 
+<img width="372" height="335" alt="image" src="https://github.com/user-attachments/assets/7bca87f5-3c72-486b-a6fa-affc7a431063" />
+
+
 2. 输入：`我需要开发一个 OKR 管理应用，支持创建目标、添加关键结果、追踪进度。请进行需求分析。`
 
 **Analyst 的输出（写入 `thinking/analyst.md`）：**
 
-```markdown
-## 需求分析与核心逻辑
+<img width="1098" height="1012" alt="image" src="https://github.com/user-attachments/assets/d67986d2-b28d-41f2-8e64-90df108defae" />
 
-### 用户故事拆解
-1. **US-1**: As a 团队成员, I want to 创建 Objective, so that 明确团队季度目标
-2. **US-2**: As a 团队成员, I want to 为 Objective 添加 Key Results, so that 量化目标达成标准
-3. **US-3**: As a 团队成员, I want to 更新 Key Result 进度, so that 实时追踪目标完成情况
 
-### 核心实体
-- **Objective**: { id, title, description, deadline, status, progress }
-- **KeyResult**: { id, objectiveId, title, target, current, unit, progress }
-
-### 关键业务流程
-1. 创建 Objective → 生成 ID → 存储 → 返回创建结果
-2. 添加 Key Result → 验证 Objective 存在 → 存储 → 更新 Objective 进度
-3. 更新 Key Result → 验证权限 → 更新进度 → 重新计算 Objective 进度
-
-## 验收标准
-1. ✅ 创建 Objective 时，必填字段验证正确（title, deadline）
-2. ✅ Key Result 的 current 值不能超过 target
-3. ✅ Objective 的 progress 自动计算为所有 Key Results 的平均进度
-4. ✅ 删除 Objective 时，关联的 Key Results 自动删除
-5. ✅ API 返回统一的错误格式
-
-## 接口初稿
-
-### POST /api/objectives
-创建目标
-- Request: { title: string, description?: string, deadline: string }
-- Response: { id: string, ...objective }
-- Status: 201 Created / 400 Bad Request
-
-### GET /api/objectives
-查询目标列表
-- Response: { objectives: Objective[] }
-- Status: 200 OK
-
-### POST /api/objectives/:id/key-results
-添加关键结果
-- Request: { title: string, target: number, unit: string }
-- Response: { id: string, ...keyResult }
-- Status: 201 Created / 404 Not Found
-
-### PATCH /api/key-results/:id
-更新关键结果进度
-- Request: { current: number }
-- Response: { ...keyResult }
-- Status: 200 OK / 404 Not Found
-
-## 错误与状态码约定
-- 错误结构: { code: string, message: string }
-- InvalidInput (400): 非法输入
-- NotFound (404): 资源不存在
-- InternalError (500): 内部错误
-```
-
-**Analyst 自动 handoff 到 Architect**
+**点击架构设计，Analyst 会将任务 handoff 到 Architect**
 
 ---
 
 #### Step 2: 架构设计（@architect）
 
-**Architect 自动接收任务，输出到 `thinking/architect.md`：**
+**Architect 自动接收任务并按照 architect.agent.md 里定义内容执行(包含切换 Model)， 最后输出到 `thinking/architect.md`：**
 
 ```markdown
 ## 架构设计与技术选型
