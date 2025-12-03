@@ -499,18 +499,28 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 以上均为在  VS Code 中 GitHub Copilot Local Agent 的 Vibe Coding 场景
 
 
-## 第四部分：Cloud Agent & Background Copilot Chat Session 代码审查
+## 第四部分： 代码审查
 
-
+本场景中使用不同 Agents 场景来做代码审查，包含 Cloud Agent， Background Copilot Session 及  GitHub PR 的 Copilot Code Review
 ---
+在 VSCode Sidebar中打开 Agents 后可以看到创建不同的 Agent Session 模式:
+- 当前 Local Agent 只能在前台独占任务执行（即同一时间只有一个 Local Agent 能执行任务），下面两种会话类别可以并行执行任务
+- Cloud Agent 是前文中定义在 ORG 下的 .github-private/agents 下的 Agent
+- Background Copilot Session 会在本地使用 Copilot CLI 来执行任务. 当前除 Workspace 目录空间外也支持 WorkTree 的外部目录模式。
+  
 <img width="1154" height="642" alt="image" src="https://github.com/user-attachments/assets/935779cb-b86c-42dd-84c7-94bd685e2d43" />
 
 ### 4.1 Cloud Agent - Reviewer 审查
-
+选择 Review
 <img width="1012" height="755" alt="image" src="https://github.com/user-attachments/assets/4b64fc01-97e1-4306-9b6f-b0bb3a81827a" />
 
 
 <img width="1009" height="507" alt="image" src="https://github.com/user-attachments/assets/2bf3964a-ae7b-4b88-87e8-efe0162df01c" />
+
+
+
+<img width="1553" height="876" alt="image" src="https://github.com/user-attachments/assets/8826f42e-1352-40be-be32-0ce888882375" />
+<img width="1517" height="860" alt="image" src="https://github.com/user-attachments/assets/c265da61-120c-4b2f-ba7c-062b03158deb" />
 
 4. **输出审查报告（作为 PR Comment）：**
 
