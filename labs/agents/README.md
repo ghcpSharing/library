@@ -432,6 +432,9 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
    - 启用 "CodeQL analysis"
    - 启用 "Dependency graph"
    - 启用 "Dependabot alerts"
+- 在 GitHub Org 中配置 .github-private  配置 `agents/reviewer.agent.md` 作为 Cloud Agent。
+
+
 ### 3.1 项目需求
 
 **项目背景：**
@@ -445,8 +448,9 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 **在 VS Code 中操作：**
 
-1. 打开 Copilot Chat
-2. 输入：`@analyst 我需要开发一个 OKR 管理应用，支持创建目标、添加关键结果、追踪进度。请进行需求分析。`
+1. 打开 Copilot Chat, 切换至 Analyst Agent， 这还可以看到其它 Agents(Local Custom Agents 及 Cloud Agent)。
+
+2. 输入：`我需要开发一个 OKR 管理应用，支持创建目标、添加关键结果、追踪进度。请进行需求分析。`
 
 **Analyst 的输出（写入 `thinking/analyst.md`）：**
 
