@@ -437,27 +437,6 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 **项目背景：**
 构建一个轻量级的 OKR（Objectives and Key Results）管理系统，支持团队设定目标、追踪关键结果进度。
 
-**核心功能：**
-1. **Objective 管理**
-   - 创建目标（标题、描述、截止日期）
-   - 查询目标列表
-   - 更新目标状态
-
-2. **Key Result 管理**
-   - 为目标添加关键结果
-   - 更新进度（0-100%）
-   - 自动计算目标完成度
-
-3. **数据持久化**
-   - 使用内存存储（简化 Lab）
-   - 支持导出 JSON
-
-**技术约束：**
-- 后端：Node.js 22 + TypeScript + Express
-- 数据验证：Zod
-- 测试：Vitest
-- 部署：Docker + Kubernetes
-
 ---
 
 ### 3.2 完整开发流程（使用 Custom Agents）
