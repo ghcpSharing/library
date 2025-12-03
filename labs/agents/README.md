@@ -422,7 +422,7 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 ## 第三部分：实战项目 - OKR 管理应用
 
-本部分的内容过程将会以 `https://github.com/nikadwangorg/agents-demo.git` 仓库做为记录。
+本部分的内容过程将会以 [nikadwangorg/agents-demo](https://github.com/nikadwangorg/agents-demo.git) 仓库做为记录。
 - Initialize 一个新的 GitHub 仓库 `agents-demo`，
 - 将 `.github/agents` 目录放到该仓库中，后续在 VS Code 中使用 GitHub Copilot Custom Agents 进行开发。
 - 开启 GitHub Advanced Security 相关功能
