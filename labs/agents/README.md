@@ -12,8 +12,6 @@
 - 实践 GitHub Advanced Security 功能（Code Scanning、Code Quality、Autofix）
 - 构建完整的 AI 驱动 DevSecOps 工作流
 
-**预计时间：** 2-3 小时
-
 ---
 
 ## 第一部分：GitHub Copilot Agents 架构与类型
@@ -444,7 +442,7 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 ### 3.2 完整开发流程（使用 Custom Agents）
 
-#### Step 1: 需求分析（@analyst）
+#### Step 1: 需求分析（@Analyst）
 
 **在 VS Code 中操作：**
 
@@ -464,168 +462,23 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 
 ---
 
-#### Step 2: 架构设计（@architect）
+#### Step 2: 架构设计（@Architect）
 
 **Architect 自动接收任务并按照 architect.agent.md 里定义内容执行(包含切换 Model)， 最后输出到 `thinking/architect.md`：**
 
-```markdown
-## 架构设计与技术选型
+<img width="1154" height="1021" alt="image" src="https://github.com/user-attachments/assets/87040df6-be80-4b6b-862f-558e373d376e" />
 
-### 技术栈
-- **后端**: Node.js 22 + TypeScript + Express
-- **数据验证**: Zod
-- **测试**: Vitest
-- **构建**: esbuild
-- **容器**: Docker (multi-stage)
-- **部署**: Kubernetes
 
-### 架构模式
-采用三层架构（Controller - Service - Repository）
-
-### 数据模型
-
-```typescript
-interface Objective {
-  id: string;
-  title: string;
-  description?: string;
-  deadline: string;  // ISO 8601
-  status: 'active' | 'completed' | 'archived';
-  progress: number;  // 0-100
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface KeyResult {
-  id: string;
-  objectiveId: string;
-  title: string;
-  target: number;
-  current: number;
-  unit: string;  // e.g., "users", "%", "MRR"
-  progress: number;  // (current / target) * 100
-  createdAt: string;
-  updatedAt: string;
-}
-```
-
-### 项目结构
-```
-okr-system/
-├── src/
-│   ├── models/          # 数据模型定义
-│   ├── repositories/    # 数据访问层
-│   ├── services/        # 业务逻辑层
-│   ├── controllers/     # 路由控制器
-│   ├── schemas/         # Zod 验证模式
-│   ├── utils/           # 工具函数
-│   └── index.ts         # 入口
-├── tests/               # 测试文件
-├── k8s/                 # K8s 配置
-├── Dockerfile
-└── package.json
-```
-
-## 开发任务清单
-- [ ] Task 1: 项目初始化（tsconfig, package.json, eslint）
-- [ ] Task 2: 定义数据模型（Objective, KeyResult）
-- [ ] Task 3: 实现 Repository 层（内存存储）
-- [ ] Task 4: 实现 Service 层（业务逻辑）
-- [ ] Task 5: 实现 Controller 层（API 路由）
-- [ ] Task 6: 编写单元测试（覆盖率 > 80%）
-- [ ] Task 7: 创建 Dockerfile
-- [ ] Task 8: 创建 K8s Manifests
-```
-
-**Architect 自动 handoff 到 Coder**
+**再点击代码实现， Architect 会将任务自动 handoff 到 Coder**
 
 ---
 
-#### Step 3: 代码实现（@coder）
+#### Step 3: 代码实现（@Coder）
 
-**Coder 执行所有任务，生成完整代码：**
+**Coder 执行所有任务，生成完整代码，并测试且修正直到能正常运行。在最后将它的工作记录归纳并输出到 `thinking/coder.md`：**
 
-**核心代码示例（`src/services/ObjectiveService.ts`）：**
 
-```typescript
-import { v4 as uuidv4 } from 'uuid';
-import { Objective, CreateObjectiveInput } from '../models/Objective';
-import { ObjectiveRepository } from '../repositories/ObjectiveRepository';
-import { KeyResultRepository } from '../repositories/KeyResultRepository';
-
-export class ObjectiveService {
-  constructor(
-    private objectiveRepo: ObjectiveRepository,
-    private keyResultRepo: KeyResultRepository
-  ) {}
-
-  async createObjective(input: CreateObjectiveInput): Promise<Objective> {
-    const objective: Objective = {
-      id: uuidv4(),
-      title: input.title,
-      description: input.description,
-      deadline: input.deadline,
-      status: 'active',
-      progress: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    
-    return this.objectiveRepo.save(objective);
-  }
-
-  async updateObjectiveProgress(objectiveId: string): Promise<void> {
-    const keyResults = await this.keyResultRepo.findByObjectiveId(objectiveId);
-    
-    if (keyResults.length === 0) {
-      return;
-    }
-    
-    const avgProgress = keyResults.reduce((sum, kr) => sum + kr.progress, 0) / keyResults.length;
-    
-    await this.objectiveRepo.updateProgress(objectiveId, Math.round(avgProgress));
-  }
-
-  async getObjectives(): Promise<Objective[]> {
-    return this.objectiveRepo.findAll();
-  }
-}
-```
-
-**测试示例（`tests/ObjectiveService.test.ts`）：**
-
-```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
-import { ObjectiveService } from '../src/services/ObjectiveService';
-import { InMemoryObjectiveRepository } from '../src/repositories/InMemoryObjectiveRepository';
-import { InMemoryKeyResultRepository } from '../src/repositories/InMemoryKeyResultRepository';
-
-describe('ObjectiveService', () => {
-  let service: ObjectiveService;
-  
-  beforeEach(() => {
-    const objRepo = new InMemoryObjectiveRepository();
-    const krRepo = new InMemoryKeyResultRepository();
-    service = new ObjectiveService(objRepo, krRepo);
-  });
-
-  it('should create objective with default progress 0', async () => {
-    const input = {
-      title: 'Increase user engagement',
-      deadline: '2025-12-31',
-    };
-    
-    const result = await service.createObjective(input);
-    
-    expect(result.id).toBeDefined();
-    expect(result.title).toBe(input.title);
-    expect(result.progress).toBe(0);
-    expect(result.status).toBe('active');
-  });
-});
-```
-
-**Coder 输出到 `thinking/coder.md`：**
+**再点击DevSecOps， Coder 会将任务自动 handoff 到 SRE**
 
 ```markdown
 ## 实现完成报告
