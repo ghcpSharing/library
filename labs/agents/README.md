@@ -562,6 +562,14 @@ Copilot 会在当前 PR 中列出它对不同的文件修改意见，并能选�
 ### 5.2   AI Findings
 
 
+### 5.3 Autofix 
+在被找出的 Security  Alert (含 Code Scanning, Secret Scanning, Dependendabot, AI Findings ) 都可以快速的通过 Copilot Autofix 来修复
+<img width="1349" height="606" alt="image" src="https://github.com/user-attachments/assets/79e2229a-e08e-4ae9-a53a-e888aa7942f7" />
+
+<img width="1125" height="794" alt="image" src="https://github.com/user-attachments/assets/6844dc34-a6c0-459d-aede-fba072e9edb1" />
+
+
+
 ---
 
 ## 第六部分：完整工作流演示
