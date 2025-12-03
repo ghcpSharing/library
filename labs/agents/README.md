@@ -657,6 +657,46 @@ graph TB
 
 ---
 
+### 7.3 GitHub Copilot Security 最佳实践
+
+结合第五部分的实战流程，以下是在安全场景中高效使用 Copilot 的最佳实践：
+
+1. **启用 Code Quality 自动扫描**
+   - 如 5.1 节所示，在 `Settings → Security → Code Quality` 中启用
+   - 配置触发时机：`push 到 main 分支` 或定期扫描
+   - 扫描结果会自动分类为 Standard findings 和 AI findings
+
+2. **快速处理 Security Alerts**
+   - 在 GitHub Security 标签页统一查看所有告警类型：
+     - Code Scanning（CodeQL 静态分析）
+     - Secret Scanning（密钥泄露检测）
+     - Dependabot（依赖漏洞）
+     - AI Findings（AI 驱动的代码质量问题）
+   - 每个 Alert 都支持 Copilot 对话，快速理解漏洞影响
+
+3. **善用 Autofix 一键修复**
+   - 如 5.3 节所示，点击 Alert 详情页的 **"Generate fix"** 按钮
+   - Copilot 会生成修复代码并解释修复原理
+   - 审查确认后，可直接 **Commit suggestion** 或创建 PR
+   - 支持的告警类型：Code Scanning、Secret Scanning、Dependabot、AI Findings
+
+4. **结合 Code Review 形成闭环**
+   - PR 中的 Copilot Code Review（4.3 节）会标记潜在安全问题
+   - 点击 **"Implement Suggestion"** 让 Cloud Agent 自动修复
+   - 修复后的代码会再次触发 Code Quality 扫描，形成安全闭环
+
+5. **利用 Cloud Agent 进行安全专项审查**
+   - 如 4.1 节所示，可通过 `@reviewer` Cloud Agent 进行规范+安全审查
+   - 审查结果以 PR 形式追踪，便于团队协作
+   - 支持脱离 IDE，直接在 GitHub 上新建 Session 处理安全问题
+
+6. **Background Session 并行安全检查**
+   - 如 4.2 节所示，使用 Background Session 进行边界条件和性能审查
+   - 输出结构化报告到 `thinking/background-reviewer.md`
+   - 与前台 Cloud Agent 的安全审查并行执行，提升效率
+
+---
+
 ## 第八部分：扩展学习资源
 
 ### 8.1 官方文档
