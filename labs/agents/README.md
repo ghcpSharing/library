@@ -521,10 +521,11 @@ GitHub Code Quality 是独立于 Code Scanning 的代码质量分析工具，帮
 <img width="1009" height="507" alt="image" src="https://github.com/user-attachments/assets/2bf3964a-ae7b-4b88-87e8-efe0162df01c" />
 <img width="1895" height="872" alt="image" src="https://github.com/user-attachments/assets/02c9eb5c-d57c-47f4-a12c-16cbde07a71a" />
 
-可在 GitHub 中的 Copilot 的Agent 会话列表下能看到对应的工作任务，它通过 PR 的方式来 Track 对应的工作任务,下面为 Review 结果
+可在 GitHub 中的 Copilot 的Agent 会话列表下能看到对应的工作任务，它通过新建分支 & PR 的方式来 Track 对应的工作任务,下面为 Review 结果
 <img width="1893" height="907" alt="image" src="https://github.com/user-attachments/assets/319f72e7-0779-4b90-a852-ec6447e8fe24" />
+亦可以通过 GitHub Copilot 的 Agents 新建 Session 用于解决当前  GitHub Repo 中特定分支的问题， 它同样会新建分支与 PR 的形式来解决问题，即可以脱离 PC/IDE 来完成后续的工作任务。
 
-
+<img width="1532" height="575" alt="image" src="https://github.com/user-attachments/assets/bd177237-16a4-4a68-9d1d-e2b6b53c37be" />
 
 
 
@@ -545,121 +546,12 @@ Copilot 会在当前 PR 中列出它对不同的文件修改意见，并能选�
 
 <img width="956" height="2049" alt="image" src="https://github.com/user-attachments/assets/65b5c714-22f3-4b59-8a1b-d36269852d4a" />
 
----
-
-## 第五部分：GitHub Advanced Security 实战
-
-### 5.1 启用 Code Scanning
-
-**在 GitHub 仓库中配置：**
-
-1. 进入 **Settings → Security → Code security and analysis**
-2. 点击 **Set up** 按钮（Code scanning）
-3. 选择 **Advanced** → 创建自定义 workflow
-4. 使用本 Lab 第 2.2 节提供的 `codeql-analysis.yml` 配置
 
 ---
 
-### 5.2 模拟漏洞并测试 Autofix
+## 第五部分：GitHub Copilot on Security
 
-**在代码中故意引入 SQL 注入漏洞：**
-
-```typescript
-// src/controllers/ObjectiveController.ts（故意的漏洞代码）
-app.get('/api/objectives/search', (req, res) => {
-  const keyword = req.query.keyword;
-  const query = `SELECT * FROM objectives WHERE title LIKE '%${keyword}%'`;  // ❌ SQL 注入
-  db.query(query, (err, results) => {
-    res.json(results);
-  });
-});
-```
-
-**创建 PR 后，观察 Code Scanning 结果：**
-
-1. PR 页面会显示 **Code scanning alert**：
-   - **漏洞类型**: SQL Injection (CWE-089)
-   - **严重性**: Critical
-   - **位置**: src/controllers/ObjectiveController.ts:42
-
-2. 点击 **View details** 查看详细分析
-
-3. **Autofix 自动生成修复建议**：
-
-```typescript
-// Copilot Autofix 建议的修复
-app.get('/api/objectives/search', (req, res) => {
-  const keyword = req.query.keyword as string;
-  const query = 'SELECT * FROM objectives WHERE title LIKE ?';  // ✅ 参数化查询
-  db.query(query, [`%${keyword}%`], (err, results) => {
-    if (err) {
-      return res.status(500).json({ code: 'InternalError', message: 'Database query failed' });
-    }
-    res.json(results);
-  });
-});
-```
-
-4. **应用修复**：
-   - 点击 **Apply fix** 按钮
-   - Autofix 会自动创建一个新的 commit
-   - CI 重新运行，验证修复有效
-
----
-
-### 5.3 Code Quality 检查
-
-**Code Quality 会自动在 PR 中标记质量问题：**
-
-**示例问题：**
-
-1. **复杂度过高：**
-```typescript
-// ⚠️ Code Quality Alert: Cyclomatic complexity = 15
-function processObjective(obj: Objective) {
-  if (obj.status === 'active') {
-    if (obj.progress >= 100) {
-      if (obj.deadline > new Date().toISOString()) {
-        // ... 深层嵌套逻辑
-      }
-    }
-  }
-}
-```
-
-**修复建议：**
-```typescript
-// ✅ 提前返回，降低复杂度
-function processObjective(obj: Objective) {
-  if (obj.status !== 'active') return;
-  if (obj.progress < 100) return;
-  if (obj.deadline <= new Date().toISOString()) return;
-  
-  // 主逻辑
-}
-```
-
-2. **未使用的变量：**
-```typescript
-// ⚠️ Code Quality Alert: Unused variable
-const unusedVar = fetchSomeData();
-```
-
----
-
-### 5.4 设置分支保护规则
-
-**确保代码质量和安全检查强制执行：**
-
-1. **Settings → Branches → Add rule**
-2. **Branch name pattern**: `main`
-3. **勾选以下选项**：
-   - ✅ Require status checks to pass before merging
-     - ✅ CI (test, lint, typecheck)
-     - ✅ CodeQL
-   - ✅ Require code scanning results
-   - ✅ Require pull request reviews before merging
-   - ✅ Dismiss stale pull request approvals when new commits are pushed
+### 5.1 Code Quality & AI Findings
 
 ---
 
@@ -713,59 +605,6 @@ graph TB
 
 ---
 
-### 6.2 实战演练步骤
-
-**Step 1: 克隆 Lab 仓库**
-```bash
-git clone https://github.com/<your-org>/okr-lab
-cd okr-lab
-```
-
-**Step 2: 配置 Custom Agents**
-```bash
-# 确保 .github/agents/ 目录下有以下文件：
-# - analyst.agent.md
-# - architect.agent.md
-# - coder.agent.md
-# - sre.agent.md
-```
-
-**Step 3: 启动需求分析**
-在 VS Code 中：
-1. 打开 Copilot Chat (`Cmd/Ctrl + Shift + I`)
-2. 输入：`@analyst 开发 OKR 管理应用，需求见 README.md`
-3. 等待 Analyst 完成分析并 handoff
-
-**Step 4: 依次执行 Architect → Coder → SRE**
-每个 Agent 会自动 handoff 到下一个，无需人工干预。
-
-**Step 5: 使用 Copilot CLI 辅助**
-```bash
-gh copilot
-
-> "检查当前分支状态并推送到远程"
-> "创建 PR 到 main 分支，标题为 'feat: Implement OKR management system'"
-```
-
-**Step 6: 等待 Cloud Reviewer 审查**
-PR 创建后，@reviewer 会自动运行并发布审查报告。
-
-**Step 7: 处理 Code Scanning 结果**
-如果发现漏洞，查看 Autofix 建议并应用修复。
-
-**Step 8: 合并 PR 并部署**
-所有检查通过后，合并 PR，CD 流水线自动部署到 K8s。
-
-**Step 9: 验证部署**
-```bash
-# 获取 LoadBalancer IP
-kubectl get svc okr-service -n okr-system
-
-# 测试 API
-curl http://<EXTERNAL-IP>/api/objectives
-```
-
----
 
 ## 第七部分：最佳实践与常见问题
 
@@ -792,57 +631,12 @@ curl http://<EXTERNAL-IP>/api/objectives
 ### 7.2 Cloud Agents 最佳实践
 
 1. **组织级标准化**
-   - 统一代码审查标准
+   - 定义团队、部门级别通用的Agents 及 Instructions
    - 定期更新 Agent 配置
 
 2. **权限管理**
    - 限制 `.github-private` 仓库访问权限
    - 审计 Agent 执行日志
-
-3. **性能优化**
-   - 避免 Agent 执行耗时操作
-   - 使用缓存减少重复分析
-
----
-
-### 7.3 Copilot CLI 使用技巧
-
-1. **自然语言描述清晰**
-   - ❌ "搞一下分支"
-   - ✅ "创建一个名为 feature/new-api 的新分支"
-
-2. **危险命令确认**
-   - Copilot CLI 会提示删除、强制推送等操作
-   - 始终审查命令后再执行
-
-3. **学习模式**
-   - 使用 `--explain` 选项理解命令原理
-   - 将常用命令保存为别名
-
----
-
-### 7.4 常见问题解决
-
-**Q1: Custom Agent 无法访问文件**
-```
-A: 检查 Agent 配置中的 `tools` 字段是否包含 'edit' 和 'search'
-```
-
-**Q2: Code Scanning 漏报漏洞**
-```
-A: 使用 `security-extended` 查询套件，或添加自定义 CodeQL 查询
-```
-
-**Q3: Autofix 建议不适用**
-```
-A: Autofix 是基于通用模式生成的，需要开发者根据具体业务逻辑调整
-```
-
-**Q4: K8s 部署失败**
-```
-A: 检查 kubeconfig 是否正确配置为 GitHub Secret
-A: 验证 Deployment 中的镜像名称和标签是否正确
-```
 
 ---
 
@@ -855,146 +649,6 @@ A: 验证 Deployment 中的镜像名称和标签是否正确
 - [CodeQL 查询编写指南](https://codeql.github.com/docs/writing-codeql-queries/)
 - [Copilot Autofix 负责任使用指南](https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/responsible-use-autofix-code-scanning)
 
-### 8.2 进阶主题
-
-1. **自定义 CodeQL 查询**
-   - 为团队特定的代码模式编写查询
-   - 集成到 Code Scanning workflow
-
-2. **多环境部署策略**
-   - Dev/Staging/Production 环境隔离
-   - 使用 Kustomize 管理配置差异
-
-3. **监控与可观测性**
-   - 集成 Prometheus + Grafana
-   - 配置 Alertmanager 告警
-
-4. **高级 Agent 协作**
-   - 多 Agent 并行执行
-   - 条件分支和错误处理
-
----
-
-## 附录 A：完整项目结构
-
-```
-okr-lab/
-├── .github/
-│   ├── agents/                    # Custom Agents（本地）
-│   │   ├── analyst.agent.md
-│   │   ├── architect.agent.md
-│   │   ├── coder.agent.md
-│   │   └── sre.agent.md
-│   └── workflows/                 # GitHub Actions
-│       ├── ci.yml
-│       ├── cd.yml
-│       └── codeql-analysis.yml
-│
-├── src/                           # 源代码
-│   ├── models/
-│   │   ├── Objective.ts
-│   │   └── KeyResult.ts
-│   ├── repositories/
-│   │   ├── ObjectiveRepository.ts
-│   │   └── KeyResultRepository.ts
-│   ├── services/
-│   │   ├── ObjectiveService.ts
-│   │   └── KeyResultService.ts
-│   ├── controllers/
-│   │   └── ObjectiveController.ts
-│   ├── schemas/
-│   │   └── validation.ts
-│   └── index.ts
-│
-├── tests/                         # 测试文件
-│   ├── ObjectiveService.test.ts
-│   └── integration.test.ts
-│
-├── thinking/                      # Agent 交接文档
-│   ├── analyst.md
-│   ├── architect.md
-│   ├── coder.md
-│   └── sre.md
-│
-├── k8s/                           # Kubernetes 配置
-│   ├── namespace.yaml
-│   ├── deployment.yaml
-│   └── service.yaml
-│
-├── Dockerfile                     # 容器镜像
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
----
-
-## 附录 B：Kubernetes 配置示例
-
-**`k8s/deployment.yaml`：**
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: okr-system
-  namespace: okr-system
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: okr-system
-  template:
-    metadata:
-      labels:
-        app: okr-system
-    spec:
-      containers:
-      - name: okr-api
-        image: ghcr.io/<your-org>/okr-system:__IMAGE_TAG__
-        ports:
-        - containerPort: 3000
-        env:
-        - name: NODE_ENV
-          value: "production"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
-```
-
-**`k8s/service.yaml`：**
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: okr-service
-  namespace: okr-system
-spec:
-  type: LoadBalancer
-  selector:
-    app: okr-system
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 3000
-```
 
 ---
 
