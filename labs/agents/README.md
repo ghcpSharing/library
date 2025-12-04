@@ -2,7 +2,7 @@
 
 ## Lab 概述
 
-本 Lab 将通过构建一个 **OKR 管理应用**，展示如何使用 GitHub Copilot 的三大 Agent 类型（Custom Agents、Cloud Agents、Copilot CLI）配合 GitHub Advanced Security 特性，实现从需求分析到代码审查、安全扫描的完整 AI 驱动开发流程。
+本 Lab 将通过构建一个 **OKR 管理应用**，展示如何使用 GitHub Copilot 的三大 Agent 类型（Custom Agents、Cloud Agents、Copilot CLI）配合 GitHub Advanced Security 特性，实现从需求分析到代码审查、安全扫描的完整 AI 驱动开发流程。这三类 Agent 的使用均按照 `Premium Request` 收费 
 
 **学习目标：**
 - 理解 GitHub Copilot Agents 的三种类型及其适用场景
@@ -560,11 +560,17 @@ Copilot 会在当前 PR 中列出它对不同的文件修改意见，并能选�
 
 
 ### 5.2   Findings
-<img width="1822" height="435" alt="image" src="https://github.com/user-attachments/assets/76f8ccaa-a9d8-4e5d-be68-2ede2f70e646" />
+
+Code Quality 会罗列出它找到的一些代码问题，包含静态规则与 AI 探索两方面的问题清单。
+
+<img width="1805" height="536" alt="image" src="https://github.com/user-attachments/assets/6a253c54-dae6-4a7d-b9a1-5410bd53a777" />
+
+可选择将 AI Finding 的修正意见交给  Copilot 来执行
+<img width="1891" height="773" alt="image" src="https://github.com/user-attachments/assets/c8989029-83f4-4eb0-a03f-6b23be4efa52" />
 
 
 ### 5.3 Autofix 
-在被找出的 Security  Alert (含 Code Scanning, Secret Scanning, Dependendabot, AI Findings ) 都可以快速的通过 Copilot Autofix 来修复
+在被找出的 Security  Alert (含 Code Scanning, Secret Scanning, Dependendabot, Standard Findings ) 都可以快速的通过 Copilot Autofix 来修复
 <img width="1349" height="606" alt="image" src="https://github.com/user-attachments/assets/79e2229a-e08e-4ae9-a53a-e888aa7942f7" />
 
 <img width="1125" height="794" alt="image" src="https://github.com/user-attachments/assets/6844dc34-a6c0-459d-aede-fba072e9edb1" />
@@ -602,7 +608,7 @@ graph TB
     GitPush --> PR[创建 Pull Request]
     
     PR --> CI[GitHub Actions CI<br/>运行测试]
-    PR --> CS[Code Scanning<br/>CodeQL 分析]
+    PR --> CS[Code Scanning<br/>Secret Scaning<br/>Dependabot<br/>CodeQualityCheck]
     
     CS --> AF{发现漏洞?}
     AF --> |是| Autofix[Copilot Autofix<br/>生成修复建议]
