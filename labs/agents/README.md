@@ -570,7 +570,7 @@ Code Quality 会罗列出它找到的一些代码问题，包含静态规则与 
 
 
 ### 5.3 Autofix 
-在被找出的 Security  Alert (含 Code Scanning, Secret Scanning, Dependendabot, Standard Findings ) 都可以快速的通过 Copilot Autofix 来修复
+在被找出的 Security  Alert (含 Code Scanning, Secret Scanning, Standard Findings ) 都可以快速的通过 Copilot Autofix 来修复
 <img width="1349" height="606" alt="image" src="https://github.com/user-attachments/assets/79e2229a-e08e-4ae9-a53a-e888aa7942f7" />
 
 <img width="1125" height="794" alt="image" src="https://github.com/user-attachments/assets/6844dc34-a6c0-459d-aede-fba072e9edb1" />
