@@ -45,9 +45,9 @@ graph TB
     
     subgraph "GitHub Advanced Security"
         CS[Code Scanning<br/>代码扫描]
+        CQ[Code Quality<br/>代码质量检查]
+        AS[Dependabot<br/>依赖库分析]
         AF[Autofix<br/>自动修复]
-        CQ[Code Quality<br/>质量检查]
-        AS[Advanced Security<br/>安全分析]
     end
     
     IDE --> A1
@@ -163,7 +163,7 @@ sequenceDiagram
     participant Dev as 开发者
     participant IDE as VS Code Chat
     participant Local as Custom Agents
-    participant Cloud as Cloud Agent (@reviewer)
+    participant Cloud as Cloud Agent (@reviewer或其它agent)
     participant BG as Background Session
     participant File as thinking/background-reviewer.md
     participant Git as Git Repo
@@ -202,7 +202,7 @@ sequenceDiagram
     Git->>GH: 创建 PR
     
     Note over GH: GitHub Advanced Security
-    GH->>GH: Code Scanning + Autofix
+    GH->>GH: Code Scanning + Secret Scanning + Code Quality Check + Autofix
     GH->>Dev: PR 中显示扫描结果
 ```
 
@@ -331,7 +331,7 @@ jobs:
 ### 2.3 Copilot Autofix（自动修复）
 
 **产品定位：**
-Copilot Autofix 是 Code Scanning 的扩展功能，利用大语言模型（GPT-4.1）为安全告警生成针对性的修复建议，帮助开发者避免引入新的安全漏洞。
+Copilot Autofix 是 Code Scanning 的扩展功能，利用大语言模型为安全告警生成针对性的修复建议，帮助开发者避免引入新的安全漏洞。
 
 **可用性：**
 - ✅ 所有 GitHub.com 公开仓库
@@ -346,7 +346,7 @@ C#、C/C++、Go、Java/Kotlin、Swift、JavaScript/TypeScript、Python、Ruby、
 ```mermaid
 graph LR
     A[CodeQL 检测漏洞] --> B[发送至 LLM<br/>SARIF + 代码片段 + 查询帮助]
-    B --> C[GPT-4.1 生成<br/>修复建议 + 解释]
+    B --> C[LLM 生成<br/>修复建议 + 解释]
     C --> D[内部测试验证]
     D --> E[PR 中展示建议]
     E --> F[开发者审查应用]
