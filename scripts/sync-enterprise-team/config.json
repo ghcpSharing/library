@@ -1,11 +1,54 @@
 {
-  "enterprise": "xxx",
+  "_comment": "GitHub Enterprise Team 同步配置模板",
+  
+  "enterprise": "your-enterprise-slug",
+  
+  "reserved_members": [
+    "_comment: 保留成员列表，这些用户不会被自动移除出 Enterprise",
+    "enterprise-owner-username"
+  ],
+  
+  "orgs": [
+    {
+      "_comment": "Organization 配置",
+      "login": "your-org-login",
+      "admin": "org-admin-username",
+      "billing_email": "billing@example.com",
+      "members": [
+        {
+          "email": "user1@example.com",
+          "username": "github-username-1"
+        },
+        {
+          "email": "user2@example.com",
+          "username": "github-username-2"
+        }
+      ]
+    }
+  ],
+  
   "teams": [
     {
-      "name": "xxx",
+      "_comment": "Enterprise Team 配置",
+      "name": "team-name",
       "members": [
-        {"email": "xxx@gmail.com", "username": "xxx"},
-        {"email": "xxx@qq.com", "username": "xxx"}
+        {
+          "email": "user1@example.com",
+          "username": "github-username-1"
+        },
+        {
+          "email": "user2@example.com",
+          "username": "github-username-2"
+        }
+      ]
+    },
+    {
+      "name": "another-team",
+      "members": [
+        {
+          "email": "user3@example.com",
+          "username": "github-username-3"
+        }
       ]
     }
   ]
